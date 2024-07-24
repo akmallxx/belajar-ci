@@ -39,6 +39,15 @@ $routes->post('admin/data_pegawai/update/(:segment)', 'Admin\DataPegawai::update
 $routes->get('admin/data_pegawai/delete/(:segment)', 'Admin\DataPegawai::delete/$1', ['filter' => 'AdminFilter']); 
 $routes->get('admin/data_pegawai/detail/(:segment)', 'Admin\DataPegawai::detail/$1', ['filter' => 'AdminFilter']); 
 
+$routes->group('admin', ['namespace' => 'App\Controllers\Admin', 'filter' => 'AdminFilter'], function($routes) {
+    $routes->get('rekap_bulanan', 'RekapBulanan::index');
+    $routes->get('rekap_bulanan/create', 'RekapBulanan::create');
+    $routes->post('rekap_bulanan/store', 'RekapBulanan::store');
+    $routes->get('rekap_bulanan/edit/(:segment)', 'RekapBulanan::edit/$1');
+    $routes->post('rekap_bulanan/update/(:segment)', 'RekapBulanan::update/$1');
+    $routes->get('rekap_bulanan/delete/(:segment)', 'RekapBulanan::delete/$1');
+});
+
 
 // Pegawai
 $routes->get('pegawai/home', 'Pegawai\Home::index', ['filter' => 'PegawaiFilter']);

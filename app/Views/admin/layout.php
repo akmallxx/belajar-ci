@@ -71,7 +71,7 @@
                 <a href="icons.html"> Rekap Harian </a>
               </li>
               <li>
-                <a href="mdi-icons.html"> Rekap Bulanan </a>
+                <a href="rekap_bulanan"> Rekap Bulanan </a>
               </li>
             </ul>
           </li>
