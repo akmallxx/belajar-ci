@@ -57,21 +57,21 @@
           <a href="#0" class="collapsed" data-bs-toggle="collapse" data-bs-target="#rekapPresensi" aria-controls="rekapPresensi" aria-expanded="false" aria-label="Toggle navigation">
             <span class="icon">
               <i class="bi bi-journal-text"></i>
-            </span>
-            <span class="text">Rekap Presensi</span>
-          </a>
-          <ul id="rekapPresensi" class="collapse dropdown-nav">
-            <li>
-              <a href="<?= base_url('admin/rekap_harian') ?>"> Rekap Harian </a>
-            </li>
-            <li>
-              <a href="mdi-icons.html"> Rekap Bulanan </a>
-            </li>
-          </ul>
-        </li>
-        <li class="nav-item">
-          <a href="invoice.html">
-            <span class="icon">
+              </span>
+              <span class="text">Rekap Presensi</span>
+            </a>
+            <ul id="rekapPresensi" class="collapse dropdown-nav">
+              <li>
+                <a href="<?= base_url('admin/rekap_harian') ?>"> Rekap Harian </a>
+              </li>
+              <li>
+                <a href="rekap_bulanan"> Rekap Bulanan </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="invoice.html">
+              <span class="icon">
               <i class="bi bi-person-x"></i>
             </span>
             <span class="text">Ketidakhadiran</span>
