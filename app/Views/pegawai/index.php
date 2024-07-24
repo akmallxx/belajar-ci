@@ -9,7 +9,7 @@
         <div class="fw-bold"><?= date(('d F Y')) ?></div>
         <div class="parent-clock fs-2 fw-bold">
           <?php if($cek_presensi > 0): ?>
-              <div id="emailHelp" class="form-text fs-4 mb-2">Presensi masuk berhasil.</div>
+              <div id="emailHelp" class="form-text fs-5 mb-2">Anda sudah melakukan presensi masuk.</div>
             <?php else: ?>
               <div id="jam-masuk"></div>
           <?php endif ?>
@@ -34,7 +34,11 @@
           <input type="hidden" name="tanggal_masuk" value="<?= date('Y-m-d') ?>">
           <input type="hidden" name="jam_masuk" value="<?= date('h:i:s') ?>">
           <input type="hidden" name="id_pegawai" value="<?= session()->get('id_pegawai') ?>">
-          <button type="submit" class="<?= $cek_presensi > 0 ? "btn btn-secondary" : "btn btn-primary"; ?> mt-2" <?= $cek_presensi > 0 ? "disabled" : ""; ?>>Masuk</button>
+          <!-- <button type="submit" class="<?= $cek_presensi > 0 ? "btn btn-secondary" : "btn btn-primary"; ?> mt-2" <?= $cek_presensi > 0 ? "disabled" : ""; ?>>Masuk</button> -->
+          <?php if($cek_presensi > 0): ?>
+            <?php else: ?>
+              <button type="submit" class="btn btn-primary mt-2">Masuk</button>
+          <?php endif ?>
         </form>
       </div>
     </div>
@@ -49,7 +53,7 @@
   ?>
 
   <div class="col-md-4 mb-3">
-  <div class="card">
+  <div class="card h-100">
       <div class="card-header">Presensi Keluar</div>
       <div class="card-body text-center">
         <div class="fw-bold"><?= date(('d F Y')) ?></div>
@@ -57,7 +61,7 @@
           <!-- <div id="jam-keluar"></div> -->
 
           <?php if($get_presensi['foto_keluar'] ?? '' == '' && $presensi_id == ''): ?>
-              <div id="emailHelp" class="form-text fs-4 mb-2">Presensi keluar berhasil.</div>
+              <div id="emailHelp" class="form-text fs-5 mb-2">Anda sudah melakukan presensi keluar.</div>
             <?php else: ?>
               <div id="jam-keluar"></div>
           <?php endif ?>
@@ -84,7 +88,6 @@
           <!-- <button type="submit" class="<?= $presensi_id = '' ? 'btn btn-secondary' : 'btn btn-danger' ?> mt-2" <?= $presensi_id == '' ? 'disabled' : ''; ?>>Keluar</button> -->
 
           <?php if($get_presensi['foto_keluar'] ?? '' == '' && $presensi_id == ''): ?>
-            <button type="submit" class="btn btn-secondary mt-2" disabled>Keluar</button>
             <?php else: ?>
               <button type="submit" class="btn btn-danger mt-2" <?= $cek_presensi == 0 ? 'disabled' : '' ?>>Keluar</button>
           <?php endif ?>
