@@ -10,25 +10,34 @@ class RekapBulanan extends BaseController
 {
     public function index()
     {
+        $selected_month = $this->request->getGet('month') ?: date('m');
+        $selected_year = $this->request->getGet('year') ?: date('Y');
+        
         $PresensiModel = new PresensiModel();
         $PegawaiModel = new PegawaiModel();
 
+        // Query to fetch necessary data for the selected month and year
         $query = $PresensiModel->select('
                 pegawai.nip as nip_pegawai, 
                 pegawai.nama as nama_pegawai,
                 presensi.jam_masuk,
                 presensi.jam_keluar')
             ->join('pegawai', 'pegawai.id = presensi.id_pegawai', 'left')
+            ->where('MONTH(presensi.tanggal_masuk)', $selected_month)
+            ->where('YEAR(presensi.tanggal_masuk)', $selected_year)
             ->get();
 
         $presensi_records = $query->getResultArray();
 
+        // Initialize array to hold cumulative data
         $rekap_bulanan = [];
 
+        // Calculate total lateness and total hours worked for each employee
         foreach ($presensi_records as $record) {
             $lateness = $this->calculateLateness($record['jam_masuk'], $record['jam_keluar']);
             $hours_worked = $this->calculateHoursWorked($record['jam_masuk'], $record['jam_keluar']);
 
+            // Initialize the employee's data if not already in array
             if (!isset($rekap_bulanan[$record['nip_pegawai']])) {
                 $rekap_bulanan[$record['nip_pegawai']] = [
                     'nip_pegawai' => $record['nip_pegawai'],
@@ -39,11 +48,13 @@ class RekapBulanan extends BaseController
                 ];
             }
 
+            // Increment the employee's kehadiran and add to total lateness and hours worked
             $rekap_bulanan[$record['nip_pegawai']]['jumlah_kehadiran']++;
             $rekap_bulanan[$record['nip_pegawai']]['total_lateness'] += $lateness;
             $rekap_bulanan[$record['nip_pegawai']]['total_hours_worked'] += $hours_worked;
         }
 
+        // Convert total lateness and total hours worked to hours, minutes, and seconds
         foreach ($rekap_bulanan as &$employee) {
             $employee['total_lateness'] = gmdate('H:i:s', $employee['total_lateness']);
             $employee['total_hours_worked'] = gmdate('H:i:s', $employee['total_hours_worked']);
@@ -51,7 +62,9 @@ class RekapBulanan extends BaseController
 
         $data = [
             'title' => 'Data Rekap Bulanan',
-            'rekap_bulanan' => $rekap_bulanan
+            'rekap_bulanan' => $rekap_bulanan,
+            'selected_month' => $selected_month,
+            'selected_year' => $selected_year
         ];
 
         return view('admin/rekap_bulanan/rekap_bulanan', $data);
@@ -77,6 +90,6 @@ class RekapBulanan extends BaseController
         $actual_end = new \DateTime($jam_keluar);
 
         $hours_worked = $actual_end->getTimestamp() - $actual_start->getTimestamp();
-        return max(0, $hours_worked); 
+        return max(0, $hours_worked); // Ensure non-negative hours
     }
 }
