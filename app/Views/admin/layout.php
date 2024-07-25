@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="shortcut icon" href="<?= base_url('assets/images/favicon.svg') ?>" type="image/x-icon" />
+  <link rel="shortcut icon" href="<?= base_url('assets/images/logo/loco.svg') ?>" type="image/x-icon" />
   <title><?= $title ?> | Presensi</title>
 
   <!-- ========== All CSS files linkup ========= -->
@@ -32,7 +32,7 @@
   <aside class="sidebar-nav-wrapper">
     <div class="navbar-logo">
       <a href="index.html">
-        <img src="<?= base_url('assets/images/logo/logo.svg') ?>" alt="logo" />
+        <img src="<?= base_url('assets/images/logo/LOGO.png') ?>" class="img-fluid" alt="logo" />
       </a>
     </div>
     <nav class="sidebar-nav">
@@ -204,8 +204,8 @@
             <div class="copyright text-center text-md-start">
               <p class="text-sm">
                 Designed and Developed by
-                <a href="https://plainadmin.com" rel="nofollow" target="_blank">
-                  PlainAdmin
+                <a href="" rel="nofollow" target="_blank" disabled>
+                  AbsensiKu
                 </a>
               </p>
             </div>
@@ -213,8 +213,8 @@
           <!-- end col-->
           <div class="col-md-6">
             <div class="terms d-flex justify-content-center justify-content-md-end">
-              <a href="#0" class="text-sm">Term & Conditions</a>
-              <a href="#0" class="text-sm ml-15">Privacy & Policy</a>
+              <!-- <a href="#0" class="text-sm">Term & Conditions</a>
+              <a href="#0" class="text-sm ml-15">Privacy & Policy</a> -->
             </div>
           </div>
         </div>

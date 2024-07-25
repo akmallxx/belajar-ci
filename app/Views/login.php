@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="<?= base_url('assets/images/favicon.svg'); ?>" type="image/x-icon" />
-    <title>Sign In | PlainAdmin Demo</title>
+    <link rel="shortcut icon" href="<?= base_url('assets/images/logo/loco.svg'); ?>" type="image/x-icon" />
+    <title>Sign In | AbsensiKu</title>
 
     <!-- ========== All CSS files linkup ========= -->
     <link rel="stylesheet" href="<?= base_url('assets/css/bootstrap.min.css'); ?>" />
@@ -36,10 +36,10 @@
                     </p>
                   </div>
                   <div class="cover-image">
-                    <img src="<?= base_url('assets/images/auth/signin-image.svg') ?>" alt="" />
+                    <img src="<?= base_url('assets/images/auth/IMG_4476.PNG') ?>" alt="" />
                   </div>
                   <div class="shape-image">
-                    <img src="<?= base_url('assets/images/auth/shape.svg') ?>" alt="" />
+                    <img src="<?= base_url('assets/images/auth/IMG_4479.PNG') ?>" alt="" />
                   </div>
                 </div>
               </div>
@@ -87,12 +87,12 @@
                     </div>
                     <!-- end row -->
                   </form>
-                  <div class="singin-option pt-40">
+                  <!-- <div class="singin-option pt-40">
                     <p class="text-sm text-medium text-dark text-center">
                       Don’t have any account yet?
                       <a href="<?= base_url('register') ?>">Create an account</a>
                     </p>
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </div>
