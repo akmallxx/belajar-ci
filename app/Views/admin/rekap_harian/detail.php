@@ -1,56 +1,82 @@
 <?= $this->extend('admin/layout.php'); ?>
 <?= $this->section('content'); ?>
 
-<div class="card col-md-8">
+<style>
+    .foto {
+        width: 160px;
+        height: 120px;
+        border-radius: 5px;
+    }
+</style>
+
+<div class="card col-md-6">
     <div class="card-body">
         <table class="table">
             <tr>
-                <td>Nama Lokasi</td>
+                <td>NIP</td>
                 <td>:</td>
-                <td><?= $lokasi_presensi['nama_lokasi'] ?></td>
+                <td><?= htmlspecialchars($rekap_harian['nip']) ?></td>
             </tr>
             <tr>
-                <td>Alamat Lokasi</td>
+                <td>Nama Pegawai</td>
                 <td>:</td>
-                <td><?= $lokasi_presensi['alamat_lokasi'] ?></td>
+                <td><?= htmlspecialchars($rekap_harian['nama']) ?></td>
             </tr>
             <tr>
-                <td>Tipe Lokasi</td>
+                <td>Tanggal</td>
                 <td>:</td>
-                <td><?= $lokasi_presensi['tipe_lokasi'] ?></td>
+                <td><?= htmlspecialchars($rekap_harian['tanggal_masuk']) ?></td>
             </tr>
             <tr>
-                <td>Latitude</td>
+                <td>Hari</td>
                 <td>:</td>
-                <td><?= $lokasi_presensi['latitude'] ?></td>
-            </tr>
-            <tr>
-                <td>Longitude</td>
-                <td>:</td>
-                <td><?= $lokasi_presensi['longitude'] ?></td>
-            </tr>
-            <tr>
-                <td>Radius</td>
-                <td>:</td>
-                <td><?= $lokasi_presensi['radius'] ?></td>
-            </tr>
-            <tr>
-                <td>Zona Waktu</td>
-                <td>:</td>
-                <td><?= $lokasi_presensi['zona_waktu'] ?></td>
+                <td><?= htmlspecialchars($rekap_harian['hari']) ?></td>
             </tr>
             <tr>
                 <td>Jam Masuk</td>
                 <td>:</td>
-                <td><?= $lokasi_presensi['jam_masuk'] ?></td>
+                <td><?= htmlspecialchars($rekap_harian['jam_masuk']) ?></td>
             </tr>
             <tr>
-                <td>Jam Pulang</td>
+                <td>Jam Keluar</td>
                 <td>:</td>
-                <td><?= $lokasi_presensi['jam_pulang'] ?></td>
+                <td><?= htmlspecialchars($rekap_harian['jam_keluar']) ?></td>
+            </tr>
+            <tr>
+                <td>Status</td>
+                <td>:</td>
+                <td><?= htmlspecialchars($rekap_harian['status']) ?></td>
+            </tr>
+            <tr>
+                <td>Keterlambatan</td>
+                <td>:</td>
+                <td><?= htmlspecialchars($rekap_harian['keterlambatan']) ?></td>
+            </tr>
+            <tr>
+                <td>Foto Masuk</td>
+                <td>:</td>
+                <td>
+                    <?php if ($rekap_harian['foto_masuk']) : ?>
+                        <img src="<?= base_url('uploads/' . htmlspecialchars($rekap_harian['foto_masuk'])) ?>" alt="Foto Masuk" class="img-thumbnail foto" width="150">
+                    <?php else : ?>
+                        Tidak Ada Foto
+                    <?php endif; ?>
+                </td>
+            </tr>
+            <tr>
+                <td>Foto Keluar</td>
+                <td>:</td>
+                <td>
+                    <?php if ($rekap_harian['foto_keluar']) : ?>
+                        <img src="<?= base_url('uploads/' . htmlspecialchars($rekap_harian['foto_keluar'])) ?>" alt="Foto Keluar" class="img-thumbnail foto" width="150">
+                    <?php else : ?>
+                        Tidak Ada Foto
+                    <?php endif; ?>
+                </td>
             </tr>
         </table>
     </div>
 </div>
+
 
 <?= $this->endSection(); ?>
