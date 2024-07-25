@@ -7,12 +7,12 @@
     <thead class="thead-dark">
         <tr>
             <th scope="col">No</th>
-            <th scope="col">NIP</th>
+            <!-- <th scope="col">NIP</th> -->
             <th scope="col">Nama Pegawai</th>
-            <th scope="col">Tanggal</th>
+            <!-- <th scope="col">Tanggal</th> -->
             <th scope="col">Hari</th>
-            <th scope="col">Jam Masuk</th>
-            <th scope="col">Jam Keluar</th>
+            <!-- <th scope="col">Jam Masuk</th> -->
+            <!-- <th scope="col">Jam Keluar</th> -->
             <th scope="col">Status</th>
             <th scope="col">Keterlambatan</th>
             <th scope="col">Aksi</th>
@@ -23,12 +23,11 @@
         foreach ($rekap_harian as $rh) : ?>
             <tr>
                 <td><?= $no++ ?></td>
-                <td><?= htmlspecialchars($rh['nip']) ?></td>
+
                 <td><?= htmlspecialchars($rh['nama']) ?></td>
-                <td><?= htmlspecialchars($rh['tanggal_masuk']) ?></td>
+
                 <td><?= htmlspecialchars($rh['hari']) ?></td>
-                <td><?= htmlspecialchars($rh['jam_masuk']) ?></td>
-                <td><?= htmlspecialchars($rh['jam_keluar']) ?></td>
+
                 <td><?= htmlspecialchars($rh['status']) ?></td>
                 <td><?= htmlspecialchars($rh['keterlambatan']) ?></td>
                 <td>
