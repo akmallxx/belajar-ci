@@ -1,6 +1,7 @@
 <?= $this->extend('admin/layout.php'); ?>
 <?= $this->section('content'); ?>
 
+<<<<<<< HEAD
 <div class="mb-3">
     <form method="get" action="<?= base_url('admin/rekap_harian'); ?>">
         <div class="row form-row">
@@ -15,6 +16,9 @@
         </div>
     </form>
 </div>
+=======
+<a href="<?= base_url('admin/rekap_harian/create') ?>" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Tambah Data</a>
+>>>>>>> akmal-dev/anip
 
 <table class="table table-striped table-bordered" id="datatables">
     <thead class="thead-dark">
