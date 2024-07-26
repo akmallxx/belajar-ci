@@ -30,16 +30,16 @@
               <div class="auth-cover-wrapper bg-primary-100">
                 <div class="auth-cover">
                   <div class="title text-center">
-                    <h1 class="text-primary mb-10">Welcome Back</h1>
+                    <h1 class="text-primary mb-10">Selamat Datang</h1>
                     <p class="text-medium">
-                      Sign in to your Existing account to continue
+                    Masuk ke akun Anda untuk melanjutkan
                     </p>
                   </div>
                   <div class="cover-image">
-                    <img src="<?= base_url('assets/images/auth/IMG_4476.PNG') ?>" alt="" />
+                    <img src="<?= base_url('assets/images/auth/IMG_4493.PNG') ?>" class="img-fluid" alt="" />
                   </div>
                   <div class="shape-image">
-                    <img src="<?= base_url('assets/images/auth/IMG_4479.PNG') ?>" alt="" />
+                    <img src="<?= base_url('assets/images/auth/') ?>" alt="" />
                   </div>
                 </div>
               </div>
@@ -50,8 +50,8 @@
                 <div class="form-wrapper">
                   <h6 class="mb-15">Sign In Form</h6>
                   <p class="text-sm mb-25">
-                    Start creating the best possible user experience for you
-                    customers.
+                  Mulailah menciptakan pengalaman pengguna terbaik untuk Anda
+                  
                   </p>
 
                   <?php if(!empty(session()->getFlashData('pesan'))): ?>
@@ -80,7 +80,7 @@
                       <div class="col-12">
                         <div class="button-group d-flex justify-content-center flex-wrap">
                           <button type="submit" class="main-btn primary-btn btn-hover w-100 text-center">
-                            Sign In
+                            Masuk
                           </button>
                         </div>
                       </div>
