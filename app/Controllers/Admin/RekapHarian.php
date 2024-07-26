@@ -11,23 +11,13 @@ class RekapHarian extends BaseController
     public function index()
     {
         $presensiModel = new PresensiModel();
-<<<<<<< HEAD
         $tanggal = $this->request->getGet('tanggal') ?: date('Y-m-d'); // Ambil tanggal dari parameter GET atau gunakan tanggal hari ini
 
         $rekap_harian = $presensiModel->select('presensi.*, pegawai.nama, pegawai.lokasi_presensi')
-=======
-        $tanggal = date('Y-m-d'); // Ambil tanggal hari ini
-
-        $rekap_harian = $presensiModel->select('presensi.*, pegawai.nama, pegawai.lokasi_presensi') // Pilih kolom yang diperlukan
->>>>>>> akmal-dev/anip
             ->join('pegawai', 'pegawai.id = presensi.id_pegawai')
             ->where('tanggal_masuk', $tanggal)
             ->findAll();
 
-<<<<<<< HEAD
-=======
-        // Tambahkan status berdasarkan kehadiran dan keterlambatan, serta hari
->>>>>>> akmal-dev/anip
         foreach ($rekap_harian as &$rh) {
             $batas_waktu = $this->getBatasWaktu($rh['lokasi_presensi']);
             $rh['status'] = $rh['jam_masuk'] ? 'Hadir' : 'Tidak Hadir';
@@ -36,24 +26,16 @@ class RekapHarian extends BaseController
         }
 
         $data = [
-<<<<<<< HEAD
             'title' => 'Detail Presensi',
             'rekap_harian' => $rekap_harian,
             'tanggal' => $tanggal // Kirimkan tanggal ke view
-=======
-            'title' => 'Rekap Harian',
-            'rekap_harian' => $rekap_harian
->>>>>>> akmal-dev/anip
         ];
         return view('admin/rekap_harian/rekap_harian', $data);
     }
 
-<<<<<<< HEAD
 
 
 
-=======
->>>>>>> akmal-dev/anip
     private function getHari($tanggal)
     {
         $hari = date('l', strtotime($tanggal));
@@ -213,7 +195,6 @@ class RekapHarian extends BaseController
         if ($rekapHarian) {
             // Tentukan path file
             $uploadDir = ROOTPATH . 'public/uploads/';
-<<<<<<< HEAD
             $fotoMasukFile = basename($rekapHarian['foto_masuk']);
             $fotoKeluarFile = basename($rekapHarian['foto_keluar']);
             $fotoMasukPath = $uploadDir . $fotoMasukFile;
@@ -224,16 +205,6 @@ class RekapHarian extends BaseController
                 unlink($fotoMasukPath);
             }
             if (file_exists($fotoKeluarPath) && !is_dir($fotoKeluarPath)) {
-=======
-            $fotoMasukPath = $uploadDir . basename($rekapHarian['foto_masuk']);
-            $fotoKeluarPath = $uploadDir . basename($rekapHarian['foto_keluar']);
-
-            // Hapus file jika ada
-            if (file_exists($fotoMasukPath)) {
-                unlink($fotoMasukPath);
-            }
-            if (file_exists($fotoKeluarPath)) {
->>>>>>> akmal-dev/anip
                 unlink($fotoKeluarPath);
             }
 

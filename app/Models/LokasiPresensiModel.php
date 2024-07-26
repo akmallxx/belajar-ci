@@ -9,7 +9,6 @@ class LokasiPresensiModel extends Model
     protected $table            = 'lokasi_presensi';
     protected $primaryKey       = 'id';
     protected $allowedFields    = [
-<<<<<<< HEAD
         'nama_lokasi',
         'alamat_lokasi',
         'tipe_lokasi',
@@ -18,16 +17,6 @@ class LokasiPresensiModel extends Model
         'radius',
         'zona_waktu',
         'jam_masuk',
-=======
-        'nama_lokasi', 
-        'alamat_lokasi', 
-        'tipe_lokasi', 
-        'latitude', 
-        'longitude', 
-        'radius', 
-        'zona_waktu', 
-        'jam_masuk', 
->>>>>>> akmal-dev/anip
         'jam_pulang'
     ];
 }
