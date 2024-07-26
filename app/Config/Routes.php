@@ -46,8 +46,11 @@ $routes->get('admin/rekap_harian/edit/(:segment)', 'Admin\RekapHarian::edit/$1',
 $routes->post('admin/rekap_harian/update/(:segment)', 'Admin\RekapHarian::update/$1', ['filter' => 'AdminFilter']);
 $routes->get('admin/rekap_harian/delete/(:segment)', 'Admin\RekapHarian::delete/$1', ['filter' => 'AdminFilter']);
 $routes->get('admin/rekap_harian/detail/(:segment)', 'Admin\RekapHarian::detail/$1', ['filter' => 'AdminFilter']);
+$routes->get('admin/rekap_harian/(:num)/(:num)', 'Admin\RekapHarian::index/$1/$2', ['filter' => 'AdminFilter']);
 
-$routes->group('admin', ['namespace' => 'App\Controllers\Admin', 'filter' => 'AdminFilter'], function($routes) {
+
+
+$routes->group('admin', ['namespace' => 'App\Controllers\Admin', 'filter' => 'AdminFilter'], function ($routes) {
     $routes->get('rekap_bulanan', 'RekapBulanan::index');
     $routes->get('rekap_bulanan/create', 'RekapBulanan::create');
     $routes->post('rekap_bulanan/store', 'RekapBulanan::store');

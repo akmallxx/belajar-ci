@@ -11,14 +11,13 @@ class RekapHarian extends BaseController
     public function index()
     {
         $presensiModel = new PresensiModel();
-        $tanggal = date('Y-m-d'); // Ambil tanggal hari ini
+        $tanggal = $this->request->getGet('tanggal') ?: date('Y-m-d'); // Ambil tanggal dari parameter GET atau gunakan tanggal hari ini
 
-        $rekap_harian = $presensiModel->select('presensi.*, pegawai.nama, pegawai.lokasi_presensi') // Pilih kolom yang diperlukan
+        $rekap_harian = $presensiModel->select('presensi.*, pegawai.nama, pegawai.lokasi_presensi')
             ->join('pegawai', 'pegawai.id = presensi.id_pegawai')
             ->where('tanggal_masuk', $tanggal)
             ->findAll();
 
-        // Tambahkan status berdasarkan kehadiran dan keterlambatan, serta hari
         foreach ($rekap_harian as &$rh) {
             $batas_waktu = $this->getBatasWaktu($rh['lokasi_presensi']);
             $rh['status'] = $rh['jam_masuk'] ? 'Hadir' : 'Tidak Hadir';
@@ -27,11 +26,15 @@ class RekapHarian extends BaseController
         }
 
         $data = [
-            'title' => 'Rekap Harian',
-            'rekap_harian' => $rekap_harian
+            'title' => 'Data Presensi Harian',
+            'rekap_harian' => $rekap_harian,
+            'tanggal' => $tanggal // Kirimkan tanggal ke view
         ];
         return view('admin/rekap_harian/rekap_harian', $data);
     }
+
+
+
 
     private function getHari($tanggal)
     {
@@ -192,14 +195,16 @@ class RekapHarian extends BaseController
         if ($rekapHarian) {
             // Tentukan path file
             $uploadDir = ROOTPATH . 'public/uploads/';
-            $fotoMasukPath = $uploadDir . basename($rekapHarian['foto_masuk']);
-            $fotoKeluarPath = $uploadDir . basename($rekapHarian['foto_keluar']);
+            $fotoMasukFile = basename($rekapHarian['foto_masuk']);
+            $fotoKeluarFile = basename($rekapHarian['foto_keluar']);
+            $fotoMasukPath = $uploadDir . $fotoMasukFile;
+            $fotoKeluarPath = $uploadDir . $fotoKeluarFile;
 
             // Hapus file jika ada
-            if (file_exists($fotoMasukPath)) {
+            if (file_exists($fotoMasukPath) && !is_dir($fotoMasukPath)) {
                 unlink($fotoMasukPath);
             }
-            if (file_exists($fotoKeluarPath)) {
+            if (file_exists($fotoKeluarPath) && !is_dir($fotoKeluarPath)) {
                 unlink($fotoKeluarPath);
             }
 

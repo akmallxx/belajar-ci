@@ -3,8 +3,8 @@
 
 <div class="mb-3">
     <form method="get" action="<?= base_url('admin/rekap_bulanan') ?>">
-        <div class="form-row">
-            <div class="col">
+        <div class="row form-row">
+            <div class="col-2">
                 <label for="month">Pilih Bulan:</label>
                 <select name="month" id="month" class="form-control">
                     <?php for ($m = 1; $m <= 12; $m++): ?>
@@ -14,7 +14,7 @@
                     <?php endfor; ?>
                 </select>
             </div>
-            <div class="col">
+            <div class="col-2">
                 <label for="year">Pilih Tahun:</label>
                 <select name="year" id="year" class="form-control">
                     <?php for ($y = date('Y'); $y >= date('Y') - 10; $y--): ?>
@@ -22,7 +22,7 @@
                     <?php endfor; ?>
                 </select>
             </div>
-            <div class="col">
+            <div class="col-2">
                 <label>&nbsp;</label>
                 <button type="submit" class="btn btn-primary form-control">Tampilkan</button>
             </div>

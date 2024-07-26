@@ -1,7 +1,20 @@
 <?= $this->extend('admin/layout.php'); ?>
 <?= $this->section('content'); ?>
 
-<a href="<?= base_url('admin/rekap_harian/create') ?>" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Tambah Data</a>
+<div class="mb-3">
+    <form method="get" action="<?= base_url('admin/rekap_harian'); ?>">
+        <div class="row form-row">
+            <div class="col-md-2">
+                <label for="tanggal">Tanggal</label>
+                <input type="date" name="tanggal" id="tanggal" class="form-control" value="<?= $tanggal ?>">
+            </div>
+            <div class="col-md-2 mt-4 mb-4">
+                <label>&nbsp;</label>
+                <button type="submit" class="btn btn-primary">Tampilkan</button>
+            </div>
+        </div>
+    </form>
+</div>
 
 <table class="table table-striped table-bordered" id="datatables">
     <thead class="thead-dark">
