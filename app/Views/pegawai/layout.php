@@ -29,7 +29,7 @@
     <!-- ======== sidebar-nav start =========== -->
     <aside class="sidebar-nav-wrapper">
       <div class="navbar-logo">
-        <a href="index.html">
+        <a href="#">
           <img src="<?= base_url('assets/images/logo/LOGO.png')?>" class="img-fluid" alt="logo" />
         </a>
       </div>
