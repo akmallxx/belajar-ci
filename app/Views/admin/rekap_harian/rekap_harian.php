@@ -8,9 +8,9 @@
                 <label for="tanggal">Tanggal</label>
                 <input type="date" name="tanggal" id="tanggal" class="form-control" value="<?= $tanggal ?>">
             </div>
-            <div class="col-md-2 mt-4 mb-4">
+            <div class="col-md-2">
                 <label>&nbsp;</label>
-                <button type="submit" class="btn btn-primary">Tampilkan</button>
+                <button type="submit" class="btn btn-primary form-control">Tampilkan</button>
             </div>
         </div>
     </form>
