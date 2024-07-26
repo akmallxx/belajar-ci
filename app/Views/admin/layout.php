@@ -62,7 +62,7 @@
           </a>
           <ul id="rekapPresensi" class="collapse dropdown-nav">
             <li>
-              <a href="<?= base_url('admin/rekap_harian') ?>"> Detail Presensi</a>
+              <a href="<?= base_url('admin/rekap_harian') ?>">Rekap Harian</a>
             </li>
             <li>
               <a href="rekap_bulanan"> Rekap Bulanan </a>

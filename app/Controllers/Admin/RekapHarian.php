@@ -26,7 +26,7 @@ class RekapHarian extends BaseController
         }
 
         $data = [
-            'title' => 'Detail Presensi',
+            'title' => 'Data Presensi Harian',
             'rekap_harian' => $rekap_harian,
             'tanggal' => $tanggal // Kirimkan tanggal ke view
         ];
