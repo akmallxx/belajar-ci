@@ -51,7 +51,11 @@
             <tr>
                 <td>Lokasi Presensi</td>
                 <td>:</td>
-                <td><?= $pegawai['lokasi_presensi'] ?></td>
+                <?php
+                    $jamMasuk = date('H:i', strtotime($lokasi_presensi['jam_masuk']));
+                    $jamPulang = date('H:i', strtotime($lokasi_presensi['jam_pulang']));
+                ?>
+                <td><?= $lokasi_presensi['nama_lokasi'] . ' (' . $jamMasuk . '-' . $jamPulang . ' ' . $lokasi_presensi['zona_waktu'] . ' ) '?></td>
             </tr>
             <tr>
                 <td>Status</td>

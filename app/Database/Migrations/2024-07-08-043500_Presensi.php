@@ -30,6 +30,10 @@ class Presensi extends Migration
                 'type' => 'varchar',
                 'constraint' => '255',
             ],
+            'catatan_masuk' => [
+                'type' => 'varchar',
+                'constraint' => '255'
+            ],
             'tanggal_keluar' => [
                 'type' => 'date',
             ],
@@ -40,6 +44,14 @@ class Presensi extends Migration
                 'type' => 'varchar',
                 'constraint' => '255'
             ],
+            'catatan_keluar' => [
+                'type' => 'varchar',
+                'constraint' => '255'
+            ],
+            'lokasi_presensi' => [
+                'type' => 'INT',
+                'constraint' => '11'
+            ]
         ]);
         $this->forge->addKey('id', true);
         $this->forge->addForeignKey('id_pegawai', 'pegawai', 'id'); // add foreign key

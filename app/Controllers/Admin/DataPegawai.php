@@ -11,7 +11,7 @@ use App\Models\JabatanModel;
 
 class DataPegawai extends BaseController
 {
-    
+
     function __construct()
     {
         helper(['url', 'form']);
@@ -30,9 +30,13 @@ class DataPegawai extends BaseController
     public function detail($id)
     {
         $pegawaiModel = new PegawaiModel();
+        $lokasi_presensi = new LokasiPresensiModel();
+
+        $pegawai = $pegawaiModel->detailPegawai($id);
         $data = [
             'title' => 'Detail Data Pegawai',
-            'pegawai' => $pegawaiModel->detailPegawai($id)
+            'lokasi_presensi' => $lokasi_presensi->where('id', $pegawai['lokasi_presensi'])->first(),
+            'pegawai' => $pegawai
         ];
 
         return view('admin/data_pegawai/detail', $data);
@@ -78,6 +82,13 @@ class DataPegawai extends BaseController
                     'matches' => 'Konfirmasi password tidak cocok!'
                 ],
             ],
+            'username' => [
+                'rules' => 'alpha_numeric|is_unique[users.username]',
+                'errors' => [
+                    'alpha_numeric' => 'Username hanya boleh mengandung huruf dan angka, tanpa spasi.',
+                    'is_unique' => 'Username sudah digunakan.'
+                ],
+            ]
         ];
 
         if (!$this->validate($rules)) {
@@ -85,7 +96,7 @@ class DataPegawai extends BaseController
             $jabatan = new JabatanModel();
             $data = [
                 'title' => 'Tambah Pegawai',
-                'lokasi_presensi' =>$lokasi_presensi->findAll(),
+                'lokasi_presensi' => $lokasi_presensi->findAll(),
                 'jabatan' => $jabatan->orderBy('jabatan', 'ASC')->findAll(),
                 'validation' => \Config\Services::validation()
             ];
@@ -126,7 +137,7 @@ class DataPegawai extends BaseController
             ]);
 
             session()->setFlashData('success', 'Data Pegawai berhasil disimpan');
-    
+
             return redirect()->to(base_url('admin/data_pegawai'));
         }
     }
@@ -162,6 +173,13 @@ class DataPegawai extends BaseController
                     'matches' => 'Konfirmasi password tidak cocok!'
                 ],
             ],
+            'username' => [
+                'rules' => 'alpha_numeric|is_unique[users.username]',
+                'errors' => [
+                    'alpha_numeric' => 'Username hanya boleh mengandung huruf dan angka, tanpa spasi.',
+                    'is_unique' => 'Username sudah digunakan.'
+                ],
+            ]
         ];
 
         if (!$this->validate($rules)) {
@@ -185,7 +203,7 @@ class DataPegawai extends BaseController
                 $nama_foto = $foto->getRandomName();
                 $foto->move('profile', $nama_foto);
             }
-    
+
             $pegawaiModel = new PegawaiModel();
             $pegawaiModel->update($id, [
                 'nama' => $this->request->getPost('nama'),
@@ -196,7 +214,7 @@ class DataPegawai extends BaseController
                 'lokasi_presensi' => $this->request->getPost('lokasi_presensi'),
                 'foto' => $nama_foto
             ]);
-    
+
             if ($this->request->getPost('password') == '') {
                 $password = $this->request->getPost('password_digunakan');
             } else {
@@ -211,17 +229,17 @@ class DataPegawai extends BaseController
                     'password' => $password,
                     'status' => 'Aktif',
                     'role' => $this->request->getPost('role'),
-                    ])
+                ])
                 ->update();
-    
+
             session()->setFlashData('success', 'Data Pegawai berhasil diubah');
 
             return redirect()->to(base_url('admin/data_pegawai'));
         }
-
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $pegawaiModel = new PegawaiModel();
         $userModel = new UserModel();
         $pegawai = $pegawaiModel->find($id);

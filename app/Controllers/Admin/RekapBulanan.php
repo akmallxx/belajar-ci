@@ -5,91 +5,195 @@ namespace App\Controllers\Admin;
 use App\Controllers\BaseController;
 use App\Models\PresensiModel;
 use App\Models\PegawaiModel;
+use App\Models\LokasiPresensiModel;
+use App\Models\KetidakhadiranModel;
 
 class RekapBulanan extends BaseController
 {
     public function index()
     {
-        $selected_month = $this->request->getGet('month') ?: date('m');
-        $selected_year = $this->request->getGet('year') ?: date('Y');
-        
         $PresensiModel = new PresensiModel();
         $PegawaiModel = new PegawaiModel();
+        $LokasiPresensiModel = new LokasiPresensiModel();
+        $KetidakhadiranModel = new KetidakhadiranModel();
 
-        // Query to fetch necessary data for the selected month and year
-        $query = $PresensiModel->select('
-                pegawai.nip as nip_pegawai, 
-                pegawai.nama as nama_pegawai,
-                presensi.jam_masuk,
-                presensi.jam_keluar')
-            ->join('pegawai', 'pegawai.id = presensi.id_pegawai', 'left')
-            ->where('MONTH(presensi.tanggal_masuk)', $selected_month)
-            ->where('YEAR(presensi.tanggal_masuk)', $selected_year)
-            ->get();
+        $selected_month = $this->request->getGet('month');
+        $selected_year = $this->request->getGet('year');
 
-        $presensi_records = $query->getResultArray();
+        $presensiQuery = $PresensiModel->select('
+            presensi.id as presensi_id,
+            presensi.tanggal_masuk, 
+            presensi.jam_masuk, 
+            presensi.tanggal_keluar, 
+            presensi.jam_keluar,
+            pegawai.id as id_pegawai,
+            pegawai.nama as nama_pegawai, 
+            pegawai.nip as nip_pegawai,
+            lokasi_presensi.jam_masuk as jam_masuk_lokasi,
+            lokasi_presensi.jam_pulang as jam_pulang_lokasi
+        ')
+        ->join('pegawai', 'pegawai.id = presensi.id_pegawai', 'left')
+        ->join('lokasi_presensi', 'lokasi_presensi.id = pegawai.lokasi_presensi', 'left');
 
-        // Initialize array to hold cumulative data
+        if ($selected_month && $selected_year) {
+            $presensiQuery->where('MONTH(presensi.tanggal_masuk)', $selected_month)
+                          ->where('YEAR(presensi.tanggal_masuk)', $selected_year);
+        } elseif ($selected_year) {
+            $presensiQuery->where('YEAR(presensi.tanggal_masuk)', $selected_year);
+        }
+
+        $presensi_records = $presensiQuery->findAll();
+
         $rekap_bulanan = [];
 
-        // Calculate total lateness and total hours worked for each employee
         foreach ($presensi_records as $record) {
-            $lateness = $this->calculateLateness($record['jam_masuk'], $record['jam_keluar']);
-            $hours_worked = $this->calculateHoursWorked($record['jam_masuk'], $record['jam_keluar']);
+            $jam_masuk_lokasi = $record['jam_masuk_lokasi'];
+            $jam_pulang_lokasi = $record['jam_pulang_lokasi'];
 
-            // Initialize the employee's data if not already in array
+            $jam_masuk = strtotime($record['jam_masuk']);
+            $jam_keluar = strtotime($record['jam_keluar']);
+            $jam_masuk_lokasi = strtotime($jam_masuk_lokasi);
+            $jam_pulang_lokasi = strtotime($jam_pulang_lokasi);
+
+            $lateness = 0;
+            $hours_worked = 0;
+
+            if ($jam_masuk > $jam_masuk_lokasi) {
+                $lateness = $jam_masuk - $jam_masuk_lokasi;
+            }
+
+            if ($jam_keluar > $jam_pulang_lokasi) {
+                $hours_worked = $jam_keluar - $jam_masuk;
+            }
+
+            $absences = $KetidakhadiranModel->where('id_pegawai', $record['id_pegawai'])
+                                             ->countAllResults();
+
             if (!isset($rekap_bulanan[$record['nip_pegawai']])) {
                 $rekap_bulanan[$record['nip_pegawai']] = [
                     'nip_pegawai' => $record['nip_pegawai'],
                     'nama_pegawai' => $record['nama_pegawai'],
                     'jumlah_kehadiran' => 0,
                     'total_lateness' => 0,
-                    'total_hours_worked' => 0
+                    'total_hours_worked' => 0,
+                    'total_absences' => 0,
                 ];
             }
 
-            // Increment the employee's kehadiran and add to total lateness and hours worked
             $rekap_bulanan[$record['nip_pegawai']]['jumlah_kehadiran']++;
             $rekap_bulanan[$record['nip_pegawai']]['total_lateness'] += $lateness;
             $rekap_bulanan[$record['nip_pegawai']]['total_hours_worked'] += $hours_worked;
-        }
-
-        // Convert total lateness and total hours worked to hours, minutes, and seconds
-        foreach ($rekap_bulanan as &$employee) {
-            $employee['total_lateness'] = gmdate('H:i:s', $employee['total_lateness']);
-            $employee['total_hours_worked'] = gmdate('H:i:s', $employee['total_hours_worked']);
+            $rekap_bulanan[$record['nip_pegawai']]['total_absences'] = $absences;
         }
 
         $data = [
             'title' => 'Data Rekap Bulanan',
             'rekap_bulanan' => $rekap_bulanan,
             'selected_month' => $selected_month,
-            'selected_year' => $selected_year
+            'selected_year' => $selected_year,
         ];
 
         return view('admin/rekap_bulanan/rekap_bulanan', $data);
     }
 
-    private function calculateLateness($jam_masuk, $jam_keluar)
+    public function exportToCSV()
     {
-        $expected_start = new \DateTime('09:00:00');
-        $expected_end = new \DateTime('16:00:00');
+        $PresensiModel = new PresensiModel();
+        $KetidakhadiranModel = new KetidakhadiranModel();
 
-        $actual_start = new \DateTime($jam_masuk);
-        $actual_end = new \DateTime($jam_keluar);
+        $selected_month = $this->request->getGet('month');
+        $selected_year = $this->request->getGet('year');
 
-        $lateness_start = max(0, $actual_start->getTimestamp() - $expected_start->getTimestamp());
-        $lateness_end = max(0, $expected_end->getTimestamp() - $actual_end->getTimestamp());
+        $presensiQuery = $PresensiModel->select('
+            presensi.id as presensi_id,
+            presensi.tanggal_masuk, 
+            presensi.jam_masuk, 
+            presensi.tanggal_keluar, 
+            presensi.jam_keluar,
+            pegawai.id as id_pegawai,
+            pegawai.nama as nama_pegawai, 
+            pegawai.nip as nip_pegawai,
+            lokasi_presensi.jam_masuk as jam_masuk_lokasi,
+            lokasi_presensi.jam_pulang as jam_pulang_lokasi
+        ')
+        ->join('pegawai', 'pegawai.id = presensi.id_pegawai', 'left')
+        ->join('lokasi_presensi', 'lokasi_presensi.id = pegawai.lokasi_presensi', 'left');
 
-        return $lateness_start + $lateness_end;
-    }
+        if ($selected_month && $selected_year) {
+            $presensiQuery->where('MONTH(presensi.tanggal_masuk)', $selected_month)
+                          ->where('YEAR(presensi.tanggal_masuk)', $selected_year);
+        } elseif ($selected_year) {
+            $presensiQuery->where('YEAR(presensi.tanggal_masuk)', $selected_year);
+        }
 
-    private function calculateHoursWorked($jam_masuk, $jam_keluar)
-    {
-        $actual_start = new \DateTime($jam_masuk);
-        $actual_end = new \DateTime($jam_keluar);
+        $presensi_records = $presensiQuery->findAll();
 
-        $hours_worked = $actual_end->getTimestamp() - $actual_start->getTimestamp();
-        return max(0, $hours_worked); // Ensure non-negative hours
+        $rekap_bulanan = [];
+
+        foreach ($presensi_records as $record) {
+            $jam_masuk_lokasi = $record['jam_masuk_lokasi'];
+            $jam_pulang_lokasi = $record['jam_pulang_lokasi'];
+
+            $jam_masuk = strtotime($record['jam_masuk']);
+            $jam_keluar = strtotime($record['jam_keluar']);
+            $jam_masuk_lokasi = strtotime($jam_masuk_lokasi);
+            $jam_pulang_lokasi = strtotime($jam_pulang_lokasi);
+
+            $lateness = 0;
+            $hours_worked = 0;
+
+            if ($jam_masuk > $jam_masuk_lokasi) {
+                $lateness = $jam_masuk - $jam_masuk_lokasi;
+            }
+
+            if ($jam_keluar > $jam_pulang_lokasi) {
+                $hours_worked = $jam_keluar - $jam_masuk;
+            }
+
+            $absences = $KetidakhadiranModel->where('id_pegawai', $record['id_pegawai'])
+                                             ->countAllResults();
+
+            if (!isset($rekap_bulanan[$record['nip_pegawai']])) {
+                $rekap_bulanan[$record['nip_pegawai']] = [
+                    'nip_pegawai' => $record['nip_pegawai'],
+                    'nama_pegawai' => $record['nama_pegawai'],
+                    'jumlah_kehadiran' => 0,
+                    'total_lateness' => 0,
+                    'total_hours_worked' => 0,
+                    'total_absences' => 0,
+                ];
+            }
+
+            $rekap_bulanan[$record['nip_pegawai']]['jumlah_kehadiran']++;
+            $rekap_bulanan[$record['nip_pegawai']]['total_lateness'] += $lateness;
+            $rekap_bulanan[$record['nip_pegawai']]['total_hours_worked'] += $hours_worked;
+            $rekap_bulanan[$record['nip_pegawai']]['total_absences'] = $absences;
+        }
+
+        $csv_data = [];
+        $csv_data[] = ['NIP Pegawai', 'Nama Pegawai', 'Jumlah Kehadiran', 'Total Keterlambatan', 'Total Jam Kerja', 'Total Ketidakhadiran'];
+
+        foreach ($rekap_bulanan as $rb) {
+            $csv_data[] = [
+                $rb['nip_pegawai'],
+                $rb['nama_pegawai'],
+                $rb['jumlah_kehadiran'],
+                gmdate('H:i:s', $rb['total_lateness']),
+                gmdate('H:i:s', $rb['total_hours_worked']),
+                $rb['total_absences']
+            ];
+        }
+
+        $filename = "rekap_bulanan" . ($selected_month && $selected_year ? "{$selected_month}{$selected_year}" : ($selected_year ? "_{$selected_year}" : "")) . ".csv";
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment;filename=' . $filename);
+        $output = fopen('php://output', 'w');
+
+        foreach ($csv_data as $row) {
+            fputcsv($output, $row);
+        }
+
+        fclose($output);
+        exit;
     }
 }

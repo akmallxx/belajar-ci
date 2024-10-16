@@ -9,7 +9,7 @@
                 </div>
                 <div class="content">
                   <h6 class="mb-10">Total Pegawai</h6>
-                  <h3 class="text-bold mb-10">0</h3>
+                  <h3 class="text-bold mb-10"><?= $total_pegawai ?></h3>
                   <p class="text-sm text-success">
                 </div>
               </div>
@@ -23,7 +23,7 @@
                 </div>
                 <div class="content">
                   <h6 class="mb-10">Hadir</h6>
-                  <h3 class="text-bold mb-10">0</h3>
+                  <h3 class="text-bold mb-10"><?= $total_presensi ?></h3>
                 </div>
               </div>
               <!-- End Icon Cart -->
@@ -35,8 +35,8 @@
                 <i class="bi bi-x-circle"></i>
                 </div>
                 <div class="content">
-                  <h6 class="mb-10">Alpa</h6>
-                  <h3 class="text-bold mb-10">0</h3>
+                  <h6 class="mb-10">Terlambat Bulan Ini</h6>
+                  <h3 class="text-bold mb-10"> <?= $total_alpha ?> </h3>
                 </div>
               </div>
               <!-- End Icon Cart -->
@@ -48,8 +48,8 @@
                   <i class="lni lni-user"></i>
                 </div>
                 <div class="content">
-                  <h6 class="mb-10">Cuti/izin/Sakit</h6>
-                  <h3 class="text-bold mb-10">0</h3>
+                  <h6 class="mb-10">Izin Bulan Ini</h6>
+                  <h3 class="text-bold mb-10"> <?= $ketidakhadiran ?> </h3>
                 </div>
               </div>
               <!-- End Icon Cart -->
