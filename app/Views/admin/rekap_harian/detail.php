@@ -3,8 +3,8 @@
 
 <style>
     .foto {
-        width: 160px;
-        height: 120px;
+        width: 240px;
+        height: 320px;
         border-radius: 5px;
     }
 </style>
@@ -53,22 +53,32 @@
                 <td><?= htmlspecialchars($rekap_harian['keterlambatan']) ?></td>
             </tr>
             <tr>
+                <td>Catatan Masuk</td>
+                <td>:</td>
+                <td><?= htmlspecialchars($rekap_harian['catatan_masuk']) ?></td>
+            </tr>
+            <tr>
                 <td>Foto Masuk</td>
                 <td>:</td>
                 <td>
                     <?php if ($rekap_harian['foto_masuk']) : ?>
-                        <img src="<?= base_url('uploads/' . htmlspecialchars($rekap_harian['foto_masuk'])) ?>" alt="Foto Masuk" class="img-thumbnail foto" width="150">
+                        <img src="<?= base_url('uploads/' . htmlspecialchars($rekap_harian['foto_masuk'])) ?>" alt="Foto Masuk" class="img-thumbnail foto">
                     <?php else : ?>
                         Tidak Ada Foto
                     <?php endif; ?>
                 </td>
             </tr>
             <tr>
+                <td>Catatan Keluar</td>
+                <td>:</td>
+                <td><?= htmlspecialchars($rekap_harian['catatan_keluar']) ?></td>
+            </tr>
+            <tr>
                 <td>Foto Keluar</td>
                 <td>:</td>
                 <td>
                     <?php if ($rekap_harian['foto_keluar']) : ?>
-                        <img src="<?= base_url('uploads/' . htmlspecialchars($rekap_harian['foto_keluar'])) ?>" alt="Foto Keluar" class="img-thumbnail foto" width="150">
+                        <img src="<?= base_url('uploads/' . htmlspecialchars($rekap_harian['foto_keluar'])) ?>" alt="Foto Keluar" class="img-thumbnail foto">
                     <?php else : ?>
                         Tidak Ada Foto
                     <?php endif; ?>

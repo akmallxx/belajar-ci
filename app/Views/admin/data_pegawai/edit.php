@@ -4,6 +4,7 @@
 <div class="card col-md-6">
     <div class="card-body">
     <form  method="post" action="<?= base_url('admin/data_pegawai/update/' . $pegawai['id']) ?>" enctype="multipart/form-data">
+        <?= csrf_field(); ?>
 
     <!-- CSRF FORM -->
     <?= csrf_field() ?>
@@ -45,10 +46,11 @@
     <div class="input-style-1">
         <label>Lokasi Presensi</label>
         <select class="form-control" name="lokasi_presensi" >
-        <option value="<?= $pegawai['lokasi_presensi'] ?>"><?= $pegawai['lokasi_presensi'] ?></option>
             <?php foreach ($lokasi_presensi as $lp): ?>
-                <option value="<?=$lp['id']; ?>"><?=$lp['nama_lokasi']; ?></option>"
-            <?php endforeach ?>
+                <option value="<?=$lp['id']; ?>" <?= ($lp['id'] == $pegawai['lokasi_presensi']) ? 'selected' : ''; ?>>
+                    <?=$lp['nama_lokasi']; ?>
+                </option>
+            <?php endforeach; ?>
         </select>
     </div>
     <div class="input-style-1">
@@ -60,7 +62,8 @@
     </div>
     <div class="input-style-1">
         <label>Username</label>
-        <input type="text" class="form-control" name="username" placeholder="Username" value="<?= $pegawai['username'] ?>"  />
+        <input type="text" class="form-control <?= ($validation->hasError('username')) ? 'is-invalid' : '' ?>" name="username" placeholder="Username" value="<?= $pegawai['username'] ?>"  />
+        <div class="invalid-feedback"><?= $validation->getError('username') ?></div>
     </div>
     <div class="input-style-1">
         <label>Password</label>

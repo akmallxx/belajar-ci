@@ -4,6 +4,7 @@
 <div class="card col-md-6">
     <div class="card-body">
     <form  method="post" action="<?= base_url('admin/jabatan/store') ?>">
+        <?= csrf_field(); ?>
     <div class="input-style-1">
         <label>Nama Jabatan</label>
         <input type="text" class="form-control" name="jabatan" placeholder="Nama Jabatan" required />

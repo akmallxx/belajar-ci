@@ -13,8 +13,11 @@ class PresensiModel extends Model
         'tanggal_masuk',
         'jam_masuk',
         'foto_masuk',
+        'catatan_masuk',
         'tanggal_keluar',
         'jam_keluar',
-        'foto_keluar'
+        'foto_keluar',
+        'catatan_keluar',
+        'lokasi_presensi'
     ];
 }

@@ -10,7 +10,6 @@
             <th>NIP</th>
             <th>Nama</th>
             <th>Jabatan</th>
-            <th>Lokasi Presensi</th>
             <th>Detail</th>
             <th>Aksi</th>
         </tr>
@@ -24,7 +23,7 @@
                 <td><?= htmlspecialchars($peg['nip']) ?></td>
                 <td><?= htmlspecialchars($peg['nama']) ?></td>
                 <td><?= htmlspecialchars($peg['jabatan']) ?></td>
-                <td><?= htmlspecialchars($peg['lokasi_presensi']) ?></td>
+                <!-- <td><?= htmlspecialchars($peg['lokasi_presensi']) ?></td> -->
                 <td>
                     <a href="<?= base_url('admin/data_pegawai/detail/' . $peg['id']) ?>" class="badge bg-secondary">Klik untuk detail</a>
                 </td>

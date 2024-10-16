@@ -1,10 +1,12 @@
 <?php
+
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\UserModel;
 use App\Models\PegawaiModel;
+use App\Models\LokasiPresensiModel;
 
 class User extends BaseController
 {
@@ -24,6 +26,7 @@ class User extends BaseController
         $session = session();
         $userModel = new UserModel;
         $pegawaiModel = new PegawaiModel();
+        $lokasi_presensi = new LokasiPresensiModel();
 
         $username = $this->request->getVar('username');
         $password = $this->request->getVar('password');
@@ -34,6 +37,7 @@ class User extends BaseController
             $cekPassword = password_verify($password, $password_db);
             $cekPegawai = $pegawaiModel->where('id', $cekUsername['id_pegawai'])->first();
             $cekFoto = base_url($cekPegawai['foto'] ? 'profile/' . $cekPegawai['foto'] : 'profile/nopp.png');
+            $pegawai = $pegawaiModel->detailPegawai($cekUsername['id']);
             if ($cekPassword) {
                 $session_data = [
                     'username'  => $cekUsername['username'],
@@ -41,7 +45,9 @@ class User extends BaseController
                     'logged_in' => true,
                     'foto'      => $cekFoto,
                     'nama'      => $cekPegawai['nama'],
-                    'id_pegawai' => $cekUsername['id']
+                    'id_pegawai' => $cekUsername['id'],
+                    'lokasi' => $lokasi_presensi->where('id', $pegawai['lokasi_presensi'])->first(),
+                    'pegawai' => $pegawai
                 ];
                 $session->set($session_data);
                 switch ($cekUsername['role']) {
@@ -49,29 +55,29 @@ class User extends BaseController
                         return redirect()->to(base_url('admin/home'));
                         break;
                     case 'Pegawai':
-                        
-                        return redirect()->to(base_url('pegawai/home'));
+
+                        return redirect()->to(base_url('home'));
                         break;
-                    
+
                     default:
                         $session->setFlashData('pesan', 'Akun anda belum terdaftar!');
-                        return redirect()-> to(base_url('login'));
+                        return redirect()->to(base_url('login'));
                         break;
                 }
             } else {
                 $session->setFlashData('pesan', 'Password salah!');
-                return redirect()-> to(base_url('login'));
+                return redirect()->to(base_url('login'));
             }
         } else {
             $session->setFlashData('pesan', "Username '$username' tidak terdaftar!");
-            return redirect()-> to(base_url('login'));
+            return redirect()->to(base_url('login'));
         }
     }
 
     public function logout()
     {
-            $session = session();
-            $session->destroy();
-            return redirect()->to(base_url('login'));
+        $session = session();
+        $session->destroy();
+        return redirect()->to(base_url('login'));
     }
 }

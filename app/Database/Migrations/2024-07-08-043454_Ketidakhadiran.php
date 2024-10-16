@@ -24,7 +24,10 @@ class Ketidakhadiran extends Migration
                 'type' => 'varchar',
                 'constraint' => '255',
             ],
-            'tanggal' => [
+            'tanggal_awal' => [
+                'type' => 'DATE',
+            ],
+            'tanggal_akhir' => [
                 'type' => 'DATE',
             ],
             'deskripsi' => [

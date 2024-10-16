@@ -3,52 +3,62 @@
 
 <div class="card col-md-6">
     <div class="card-body">
-    <form  method="post" action="<?= base_url('admin/lokasi_presensi/store') ?>">
+    <form  method="post" action="<?= base_url('admin/rekap_harian/store') ?>">
+        <?= csrf_field(); ?>
 
     <div class="input-style-1">
-        <label>Nama Lokasi</label>
-        <input type="text" class="form-control" name="nama_lokasi" placeholder="Nama Lokasi" required />
-    </div>
-    <div class="input-style-1">
-        <label>Alamat Lokasi</label>
-        <textarea class="form-control" name="alamat_lokasi" rows="5" placeholder="Alamat Lokasi" required></textarea>
-    </div>
-    <div class="input-style-1">
-        <label>Tipe Lokasi</label>
-        <input type="text" class="form-control" name="tipe_lokasi" placeholder="Tipe Lokasi" required />
-    </div>
-
-    <div class="input-style-1">
-        <label>Latitude</label>
-        <input type="text" class="form-control" name="latitude" placeholder="Latitude" required />
-    </div>
-    <div class="input-style-1">
-        <label>Longitude</label>
-        <input type="text" class="form-control" name="longitude" placeholder="Longitude" required />
-    </div>
-    <div class="input-style-1">
-        <label>Radius (Meter)</label>
-        <input type="number" class="form-control" name="radius" placeholder="Radius" required />
-    </div>
-    <div class="input-style-1">
-        <label>Zona Waktu</label>
-        <select class="form-control" name="zona_waktu" required>
-            <option value="">--- Pilih ---</option>
-            <option value="WIB">WIB</option>
-            <option value="WITA">WITA</option>
-            <option value="WIT">WIT</option>
+        <label>Pegawai</label>
+        <select class="form-control" name="id_pegawai" required>
+            <option value="">--- Pilih Pegawai ---</option>
+            <?php foreach ($pegawai as $pg): ?>
+                <option value="<?= $pg['id']; ?>">[<?= $pg['nip']; ?>] <?= $pg['nama']; ?></option>
+            <?php endforeach; ?>
         </select>
     </div>
-    <div class="input-style-1">
-        <label>Jam Masuk</label>
-        <input type="time" class="form-control" name="jam_masuk" placeholder="Jam Masuk" required />
+    <div class="row">
+        <div class="col-6">
+            <div class="input-style-1">
+                <label>Tanggal Masuk</label>
+                <input type="date" class="form-control" name="tanggal_masuk" required>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="input-style-1">
+                <label>Jam Masuk</label>
+                <input type="time" class="form-control" name="jam_masuk" required>
+            </div>
+        </div>
     </div>
     <div class="input-style-1">
-        <label>jam Pulang</label>
-        <input type="time" class="form-control" name="jam_pulang" placeholder="Jam Pulang" required />
+        <label>Foto Masuk (Opsional)</label>
+        <input type="file" class="form-control" name="foto_masuk">
     </div>
-
-
+    <div class="input-style-1">
+        <label>Catatan Masuk (Opsional)</label>
+        <textarea name="catatan_masuk" id="catatan_masuk" class="form-control"></textarea>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="input-style-1">
+                <label>Tanggal Keluar</label>
+                <input type="date" class="form-control" name="tanggal_keluar" required>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="input-style-1">
+                <label>Jam Keluar</label>
+                <input type="time" class="form-control" name="jam_keluar" required>
+            </div>
+        </div>
+    </div>
+    <div class="input-style-1">
+        <label>Foto Keluar (Opsional)</label>
+        <input type="file" class="form-control" name="foto_keluar">
+    </div>
+    <div class="input-style-1">
+        <label>Catatan Keluar (Opsional)</label>
+        <textarea name="catatan_keluar" id="catatan_keluar" class="form-control"></textarea>
+    </div>
 
     <button type="submit" class="btn btn-primary">Simpan</button>
 </form>

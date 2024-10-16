@@ -4,6 +4,7 @@
 <div class="card col-md-6">
     <div class="card-body">
         <form  method="post" action="<?= base_url('admin/data_pegawai/store') ?>" enctype="multipart/form-data">
+            <?= csrf_field(); ?>
 
             <!-- CSRF FORM -->
             <?= csrf_field() ?>
@@ -55,7 +56,8 @@
             </div>
             <div class="input-style-1">
                 <label>Username</label>
-                <input type="text" class="form-control" name="username" placeholder="Username" required />
+                <input type="text" class="form-control <?= ($validation->hasError('username')) ? 'is-invalid' : '' ?>" name="username" placeholder="Username" required />
+                <div class="invalid-feedback"><?= $validation->getError('username') ?></div>
             </div>
             <div class="input-style-1">
                 <label>Password</label>

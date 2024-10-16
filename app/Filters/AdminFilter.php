@@ -16,7 +16,7 @@ class AdminFilter implements FilterInterface
         }
         if (session()->get('role_id') != 'Admin') {
             // session()->setFlashData('pesan', 'Login dulu ngab');
-            return redirect()->to(base_url('pegawai/home'));
+            return redirect()->to(base_url('home'));
         }
     }
 

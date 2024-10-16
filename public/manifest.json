@@ -1,0 +1,17 @@
+{
+    "name": "AbsensiKu",
+    "short_name": "",
+    "description": "Aplikasi Absensi CV. Soraya World.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#000000",
+    "icons": [
+      {
+        "src": "public/assets/images/logo/loco.svg",
+        "sizes": "any",
+        "type": "image/svg+xml"
+      }
+    ]
+  }
+  

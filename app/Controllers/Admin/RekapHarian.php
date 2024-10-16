@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use App\Models\PresensiModel;
+use App\Models\LokasiPresensiModel;
 use App\Models\PegawaiModel;
 
 class RekapHarian extends BaseController
@@ -11,30 +12,39 @@ class RekapHarian extends BaseController
     public function index()
     {
         $presensiModel = new PresensiModel();
+        $lokasi_presensi = new LokasiPresensiModel();
+
         $tanggal = $this->request->getGet('tanggal') ?: date('Y-m-d'); // Ambil tanggal dari parameter GET atau gunakan tanggal hari ini
 
-        $rekap_harian = $presensiModel->select('presensi.*, pegawai.nama, pegawai.lokasi_presensi')
-            ->join('pegawai', 'pegawai.id = presensi.id_pegawai')
+        // Ambil data presensi termasuk nama dari tabel pegawai
+        $rekap_harian = $presensiModel->select('presensi.*, pegawai.nama')
+            ->join('pegawai', 'pegawai.id = presensi.id_pegawai') // Gabung dengan tabel pegawai untuk mendapatkan nama
             ->where('tanggal_masuk', $tanggal)
             ->findAll();
 
         foreach ($rekap_harian as &$rh) {
+            // Ambil batas waktu berdasarkan lokasi presensi dari kolom presensi
             $batas_waktu = $this->getBatasWaktu($rh['lokasi_presensi']);
             $rh['status'] = $rh['jam_masuk'] ? 'Hadir' : 'Tidak Hadir';
+
+            // Hitung keterlambatan jika jam masuk tersedia
             $rh['keterlambatan'] = $rh['jam_masuk'] ? $this->calculateDelay($rh['jam_masuk'], $batas_waktu['jam_masuk']) : 'Belum Masuk';
+
+            // Konversi tanggal ke nama hari dalam bahasa Indonesia
             $rh['hari'] = $this->getHari($rh['tanggal_masuk']);
+
+            // Ambil detail lokasi presensi dari kolom lokasi_presensi di tabel presensi
+            $rh['lokpres'] = $lokasi_presensi->find($rh['lokasi_presensi']);
         }
 
         $data = [
             'title' => 'Data Presensi Harian',
             'rekap_harian' => $rekap_harian,
-            'tanggal' => $tanggal // Kirimkan tanggal ke view
+            'tanggal' => $tanggal
         ];
+
         return view('admin/rekap_harian/rekap_harian', $data);
     }
-
-
-
 
     private function getHari($tanggal)
     {
@@ -69,7 +79,21 @@ class RekapHarian extends BaseController
 
         if ($jam_masuk_dt > $batas_masuk_dt) {
             $interval = $jam_masuk_dt->diff($batas_masuk_dt);
-            return $interval->format('Terlambat %h jam %i menit');
+
+            // Ambil jam dan menit dari interval
+            $jam = $interval->h;
+            $menit = $interval->i;
+
+            // Buat string hasil sesuai dengan kondisi
+            $result = '';
+            if ($jam > 0) {
+                $result .= $jam . ' jam ';
+            }
+            if ($menit > 0 || $jam > 0) { // Tampilkan menit jika ada jam atau menit
+                $result .= $menit . ' menit';
+            }
+
+            return 'Terlambat ' . $result;
         } else {
             return 'Tepat Waktu';
         }
@@ -137,7 +161,8 @@ class RekapHarian extends BaseController
         // Data yang dikirim ke view
         $data = [
             'title' => 'Detail Rekap Harian',
-            'rekap_harian' => $rekap_harian
+            'rekap_harian' => $rekap_harian,
+            ''
         ];
         return view('admin/rekap_harian/detail', $data);
     }
@@ -169,19 +194,26 @@ class RekapHarian extends BaseController
     public function update($id)
     {
         $presensiModel = new PresensiModel();
+
+        // Ambil data dari form
+        $id_pegawai = $this->request->getPost('id_pegawai');
+        $jam_masuk = $this->request->getPost('jam_masuk');
+        $jam_keluar = $this->request->getPost('jam_keluar');
+
+        // Validasi input, pastikan data yang diupdate adalah yang diinginkan
+        if (!$id_pegawai || !$jam_masuk || !$jam_keluar) {
+            session()->setFlashData('error', 'Data tidak lengkap');
+            return redirect()->back()->withInput();
+        }
+
+        // Update data
         $presensiModel->update($id, [
-            'id_pegawai' => $this->request->getPost('id_pegawai'),
-            'tanggal_masuk' => $this->request->getPost('tanggal_masuk'),
-            'jam_masuk' => $this->request->getPost('jam_masuk'),
-            'tanggal_keluar' => $this->request->getPost('tanggal_keluar'),
-            'jam_keluar' => $this->request->getPost('jam_keluar'),
-            'foto_masuk' => $this->request->getPost('foto_masuk'), // Pastikan ini diupdate dengan file upload jika diperlukan
-            'foto_keluar' => $this->request->getPost('foto_keluar'), // Pastikan ini diupdate dengan file upload jika diperlukan
-            'durasi' => $this->calculateDuration(
-                $this->request->getPost('jam_masuk'),
-                $this->request->getPost('jam_keluar')
-            )
+            'id_pegawai' => $id_pegawai,
+            'jam_masuk' => $jam_masuk,
+            'jam_keluar' => $jam_keluar,
+            'durasi' => $this->calculateDuration($jam_masuk, $jam_keluar)
         ]);
+
         session()->setFlashData('success', 'Data rekap harian berhasil diubah');
 
         return redirect()->to(base_url('admin/rekap_harian'));

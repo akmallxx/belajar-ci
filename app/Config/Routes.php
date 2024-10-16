@@ -13,6 +13,7 @@ $routes->get('login', 'User::login');
 $routes->post('login_action', 'User::login_action');
 
 
+
 // Admin
 $routes->get('admin/home', 'Admin\Home::index', ['filter' => 'AdminFilter']);
 
@@ -49,6 +50,16 @@ $routes->get('admin/rekap_harian/detail/(:segment)', 'Admin\RekapHarian::detail/
 $routes->get('admin/rekap_harian/(:num)/(:num)', 'Admin\RekapHarian::index/$1/$2', ['filter' => 'AdminFilter']);
 
 
+$routes->get('admin/ketidakhadiran', 'Admin\Ketidakhadiran::index', ['filter' => 'AdminFilter']);
+$routes->get('admin/ketidakhadiran/create', 'Admin\Ketidakhadiran::create', ['filter' => 'AdminFilter']);
+$routes->post('admin/ketidakhadiran/store', 'Admin\Ketidakhadiran::store', ['filter' => 'AdminFilter']);
+$routes->get('admin/ketidakhadiran/edit/(:segment)', 'Admin\Ketidakhadiran::edit/$1', ['filter' => 'AdminFilter']);
+$routes->post('admin/ketidakhadiran/update/(:segment)', 'Admin\Ketidakhadiran::update/$1', ['filter' => 'AdminFilter']);
+$routes->get('admin/ketidakhadiran/delete/(:segment)', 'Admin\Ketidakhadiran::delete/$1', ['filter' => 'AdminFilter']);
+$routes->get('admin/ketidakhadiran/detail/(:segment)', 'Admin\Ketidakhadiran::detail/$1', ['filter' => 'AdminFilter']);
+$routes->get('admin/ketidakhadiran/statuses/(:segment)/(:segment)', 'Admin\Ketidakhadiran::statuses/$1/$2', ['filter' => 'AdminFilter']);
+$routes->get('admin/ketidakhadiran/(:num)/(:num)', 'Admin\Ketidakhadiran::index/$1/$2', ['filter' => 'AdminFilter']);
+
 
 $routes->group('admin', ['namespace' => 'App\Controllers\Admin', 'filter' => 'AdminFilter'], function ($routes) {
     $routes->get('rekap_bulanan', 'RekapBulanan::index');
@@ -57,14 +68,42 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin', 'filter' => 'Ad
     $routes->get('rekap_bulanan/edit/(:segment)', 'RekapBulanan::edit/$1');
     $routes->post('rekap_bulanan/update/(:segment)', 'RekapBulanan::update/$1');
     $routes->get('rekap_bulanan/delete/(:segment)', 'RekapBulanan::delete/$1');
+    $routes->get('rekap_bulanan/exportToCSV', 'RekapBulanan::exportToCSV');
 });
-
+// admin end
 
 // Pegawai
-$routes->get('pegawai/home', 'Pegawai\Home::index', ['filter' => 'PegawaiFilter']);
+$routes->get('home', 'Pegawai\Home::index', ['filter' => 'PegawaiFilter']);
 
-$routes->post('pegawai/presensi_masuk', 'Pegawai\Home::presensi_masuk', ['filter' => 'PegawaiFilter']);
-$routes->post('pegawai/presensi_masuk_aksi', 'Pegawai\Home::presensi_masuk_aksi', ['filter' => 'PegawaiFilter']);
+$routes->post('presensi_masuk', 'Pegawai\Home::presensi_masuk', ['filter' => 'PegawaiFilter']);
+$routes->post('presensi_masuk_aksi', 'Pegawai\Home::presensi_masuk_aksi', ['filter' => 'PegawaiFilter']);
 
-$routes->post('pegawai/presensi_keluar/(:segment)', 'Pegawai\Home::presensi_keluar/$1', ['filter' => 'PegawaiFilter']);
-$routes->post('pegawai/presensi_keluar_aksi/(:segment)', 'Pegawai\Home::presensi_keluar_aksi/$1', ['filter' => 'PegawaiFilter']);
+$routes->post('presensi_keluar/(:segment)', 'Pegawai\Home::presensi_keluar/$1', ['filter' => 'PegawaiFilter']);
+$routes->post('presensi_keluar_aksi/(:segment)', 'Pegawai\Home::presensi_keluar_aksi/$1', ['filter' => 'PegawaiFilter']);
+
+// Menampilkan halaman profil pegawai
+$routes->get('profile', 'Pegawai\Profile::index', ['filter' => 'PegawaiFilter']);
+
+// Menampilkan halaman edit profil pegawai
+$routes->get('profile/edit', 'Pegawai\Profile::edit', ['filter' => 'PegawaiFilter']);
+
+// Mengupdate profil pegawai
+$routes->post('profile/update', 'Pegawai\Profile::update', ['filter' => 'PegawaiFilter']);
+
+$routes->get('profile', 'Pegawai\Profile::index', ['filter' => 'PegawaiFilter']);
+$routes->get('profile/edit', 'Pegawai\Profile::edit', ['filter' => 'PegawaiFilter']);
+$routes->post('profile/update', 'Pegawai\Profile::update', ['Filter' => 'PegawaiFilter']);
+
+$routes->get('rekap_presensi', 'Pegawai\RekapPresensi::index', ['filter' => 'PegawaiFilter']);
+
+
+$routes->group('', function ($routes) {
+    $routes->get('ketidakhadiran', 'Pegawai\Ketidakhadiran::index');
+    $routes->get('ketidakhadiran/create', 'Pegawai\Ketidakhadiran::create');
+    $routes->post('ketidakhadiran/store', 'Pegawai\Ketidakhadiran::store');
+    $routes->get('ketidakhadiran/edit/(:segment)', 'Pegawai\Ketidakhadiran::edit/$1');
+    $routes->post('ketidakhadiran/update/(:segment)', 'Pegawai\Ketidakhadiran::update/$1');
+    $routes->get('ketidakhadiran/delete/(:segment)', 'Pegawai\Ketidakhadiran::delete/$1');
+    $routes->get('ketidakhadiran/detail/(:segment)', 'Pegawai\Ketidakhadiran::detail/$1');
+});
+// pegawai end

@@ -19,6 +19,7 @@
 
   <!-- ========== Data Tables =========== -->
   <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css" />
+  <link rel="manifest" href="<?= base_url('manifest.json') ?>">
 </head>
 
 <body>
@@ -70,7 +71,7 @@
           </ul>
         </li>
         <li class="nav-item">
-          <a href="invoice.html">
+          <a href="<?= base_url('admin/ketidakhadiran') ?>">
             <span class="icon">
               <i class="bi bi-person-x"></i>
             </span>
@@ -236,6 +237,8 @@
   <script src="<?= base_url('assets/js/world-merc.js') ?>"></script>
   <script src="<?= base_url('assets/js/polyfill.js') ?>"></script>
   <script src="<?= base_url('assets/js/main.js') ?>"></script>
+  
+  <script src="https://website-widgets.pages.dev/dist/sienna.min.js" defer></script>
 
   <!-- jquery -->
   <script src="https://cdn-script.com/ajax/libs/jquery/3.7.1/jquery.js"></script>
@@ -294,6 +297,18 @@
       return false
     });
   </script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register("<?= base_url('service-worker.js') ?>").then(function(registration) {
+          console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }, function(error) {
+          console.log('ServiceWorker registration failed: ', error);
+        });
+      });
+    }
+  </script>
+
 </body>
 
 </html>
