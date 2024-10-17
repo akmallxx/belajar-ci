@@ -34,7 +34,7 @@ class UsersSeeder extends Seeder
         // Example user data linked to the employee
         $userData = [
             'id_pegawai' => $id_pegawai,
-            'username' => 'johndoe',
+            'username' => 'admin_joe',
             'password' => password_hash('password123', PASSWORD_DEFAULT),
             'status' => 'Aktif',
             'role' => 'Admin',
@@ -46,7 +46,7 @@ class UsersSeeder extends Seeder
 
         $lokasi_presensi = new LokasiPresensiModel();
         $lokasi_presensiData = [
-            'nama_lokasi' => 'Kantor Pusat',
+            'nama_lokasi' => 'CV. Soraya World IT Consultant',
             'alamat_lokasi' => 'Timbulharjo, Sewon, Bantul, DI Yogyakarta',
             'tipe_lokasi' => 'Kantor',
             'latitude' => -7.874859177056959,
