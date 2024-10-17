@@ -16,37 +16,38 @@ class LokasiPresensi extends Migration
                 'auto_increment' => true,
             ],
             'nama_lokasi' => [
-                'type'       => 'varchar',
+                'type'       => 'VARCHAR',
                 'constraint' => '255',
             ],
             'alamat_lokasi' => [
-                'type'       => 'varchar',
+                'type'       => 'VARCHAR',
                 'constraint' => '255',
             ],
             'tipe_lokasi' => [
-                'type'       => 'varchar',
+                'type'       => 'VARCHAR',
                 'constraint' => '255',
             ],
             'latitude' => [
-                'type' => 'varchar',
-                'constraint' => '255',
+                'type'       => 'VARCHAR',
+                'constraint' => '75',
             ],
             'longitude' => [
-                'type'       => 'varchar',
-                'constraint' => '255',
+                'type'       => 'VARCHAR',
+                'constraint' => '75',
             ],
             'radius' => [
-                'type' => 'int',
+                'type'       => 'INT',
+                'constraint' => 11,
             ],
             'zona_waktu' => [
-                'type' => 'varchar',
-                'constraint' => '4'
+                'type'       => 'VARCHAR',
+                'constraint' => '4',
             ],
             'jam_masuk' => [
-                'type' => 'time',
+                'type' => 'TIME',
             ],
             'jam_pulang' => [
-                'type' => 'time',
+                'type' => 'TIME',
             ],
         ]);
         $this->forge->addKey('id', true);
@@ -55,6 +56,6 @@ class LokasiPresensi extends Migration
 
     public function down()
     {
-        $this->forge->dropTable('lokasi_presensi'); // zzzzzzzzzz
+        $this->forge->dropTable('lokasi_presensi'); // Drop table
     }
 }
