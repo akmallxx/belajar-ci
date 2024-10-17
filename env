@@ -14,7 +14,7 @@
 # ENVIRONMENT
 #--------------------------------------------------------------------
 
-CI_ENVIRONMENT = development
+CI_ENVIRONMENT = production
 
 #--------------------------------------------------------------------
 # APP
@@ -25,15 +25,16 @@ CI_ENVIRONMENT = development
 # app_baseURL = ''
 # app.forceGlobalSecureRequests = false
 # app.CSPEnabled = false
+app.webhook_url = 'https://discordapp.com/api/webhooks/1285519320163680366/9k5igObzSQrL5ghYSERV97fKKjvbJLYcnauAe30ALXSsSrBhV9eJOOh6fUFokVbcn_ve'
 
 #--------------------------------------------------------------------
 # DATABASE
 #--------------------------------------------------------------------
 
 database.default.hostname = localhost
-database.default.database = presensi_db
-database.default.username = newuser
-database.default.password = mystrongpassword
+database.default.database = ci4_presensi
+database.default.username = root
+database.default.password = root
 database.default.DBDriver = MySQLi
 database.default.DBPrefix =
 database.default.port = 3306
