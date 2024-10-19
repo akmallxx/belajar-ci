@@ -46,7 +46,7 @@ class User extends BaseController
                     'foto'      => $cekFoto,
                     'nama'      => $cekPegawai['nama'],
                     'id_pegawai' => $cekUsername['id'],
-                    'lokasi' => $lokasi_presensi->where('id', $pegawai['lokasi_presensi'])->first(),
+                    'lokasi' => $lokasi_presensi->find($pegawai['lokasi_presensi']),
                     'pegawai' => $pegawai
                 ];
                 $session->set($session_data);

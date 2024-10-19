@@ -13,6 +13,14 @@ $routes->get('login', 'User::login');
 $routes->post('login_action', 'User::login_action');
 
 
+$routes->group('api', function($routes) {
+    $routes->resource('jabatan', ['controller' => 'Api\Jabatan']);
+    $routes->resource('pegawai', ['controller' => 'Api\Pegawai']);
+    $routes->resource('ketidakhadiran', ['controller' => 'Api\Ketidakhadiran']);
+    $routes->resource('lokasi_presensi', ['controller' => 'Api\LokasiPresensi']);
+    $routes->resource('rekap_presensi', ['controller' => 'Api\RekapHarian']);
+});
+
 
 // Admin
 $routes->get('admin/home', 'Admin\Home::index', ['filter' => 'AdminFilter']);
