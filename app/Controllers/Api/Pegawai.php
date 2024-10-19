@@ -58,7 +58,7 @@ class Pegawai extends ResourceController
     }
 
     /**
-     * Contoh Format JSON untuk data pegawai
+     * Contoh dengan Format JSON untuk data pegawai
      * {
      *   "nama": "User Testing",         // Nama lengkap pegawai
      *   "username": "user",             // Username untuk login
@@ -74,7 +74,8 @@ class Pegawai extends ResourceController
     */
     public function create()
     {
-        $data = $this->request->getJSON(true);
+        // Get data from POST request
+        $data = $this->request->getPost();  // Use getPost() to retrieve form data from request
 
         $rules = [
             'username' => 'required|alpha_numeric|is_unique[users.username]',
@@ -122,19 +123,10 @@ class Pegawai extends ResourceController
         return $this->respondCreated(['message' => 'Pegawai berhasil ditambahkan.']);
     }
 
-
-    /**
-     * Metode PUT untuk memperbarui data pegawai.
-     * 
-     * Endpoint: https://domain.com/api/pegawai/$id
-     * 
-     * Metode ini memungkinkan untuk memperbarui informasi pegawai.
-     * Semua kolom dapat diisi dengan data yang sama seperti saat 
-     * create data, dan hanya sebagian kolom yang ingin anda ubah.
-    */
     public function update($id = null)
     {
-        $data = $this->request->getJSON(true);
+        // Get data from POST or PUT request
+        $data = $this->request->getRawInput();  // Use getRawInput() to capture PUT data or getPost() for form data
 
         $rules = [
             'username' => 'alpha_numeric',
@@ -153,6 +145,7 @@ class Pegawai extends ResourceController
             $foto->move('profile', $nama_foto);
         }
 
+        // Update Pegawai
         $this->pegawaiModel->update($id, [
             'nama' => $data['nama'],
             'jenis_kelamin' => $data['jenis_kelamin'],

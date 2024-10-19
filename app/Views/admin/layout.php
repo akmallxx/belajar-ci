@@ -94,6 +94,31 @@
             </li>
           </ul>
         </li>
+        <li class="nav-item nav-item-has-children">
+          <a href="#0" class="collapsed" data-bs-toggle="collapse" data-bs-target="#apiDocs" aria-controls="masterData" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="icon">
+                  <i class="bi bi-database"></i>
+              </span>
+              <span class="text">Api Docs</span>
+          </a>
+          <ul id="apiDocs" class="collapse dropdown-nav">
+              <li>
+                  <a href="<?= base_url('admin/api/rekap_presensi') ?>">Rekap Presensi</a>
+              </li>
+              <li>
+                  <a href="<?= base_url('admin/api/jabatan') ?>">Jabatan</a>
+              </li>
+              <li>
+                  <a href="<?= base_url('admin/api/lokasi_presensi') ?>">Lokasi Presensi</a>
+              </li>
+              <li>
+                  <a href="<?= base_url('admin/api/pegawai') ?>">Pegawai</a>
+              </li>
+              <li>
+                  <a href="<?= base_url('admin/api/ketidakhadiran') ?>">Ketidakhadiran</a>
+              </li>
+          </ul>
+        </li>
       </ul>
     </nav>
   </aside>

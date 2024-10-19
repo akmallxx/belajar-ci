@@ -32,10 +32,7 @@ class Ketidakhadiran extends ResourceController
             ->where('YEAR(tanggal_awal)', $tahun)
             ->findAll();
 
-        return $this->respond([
-            'status' => 200,
-            'data' => $ketidakhadiran,
-        ]);
+        return $this->respond($ketidakhadiran, 200);
     }
 
     public function show($id = null)
@@ -50,10 +47,7 @@ class Ketidakhadiran extends ResourceController
             return $this->failNotFound('Data tidak ditemukan');
         }
 
-        return $this->respond([
-            'status' => 200,
-            'data' => $ketidakhadiran,
-        ]);
+        return $this->respond($ketidakhadiran, 200);
     }
 
     public function create()
@@ -81,7 +75,7 @@ class Ketidakhadiran extends ResourceController
             'status_pengajuan' => $data['status_pengajuan'],
         ]);
 
-        return $this->respondCreated(['status' => 201, 'message' => 'Data berhasil disimpan']);
+        return $this->respondCreated(['message' => 'Data berhasil disimpan']);
     }
 
     public function update($id = null)
@@ -108,7 +102,7 @@ class Ketidakhadiran extends ResourceController
             'status_pengajuan' => $data['status_pengajuan'],
         ]);
 
-        return $this->respond(['status' => 200, 'message' => 'Data berhasil diperbarui']);
+        return $this->respond(['message' => 'Data berhasil diperbarui']);
     }
 
     public function delete($id = null)
@@ -125,7 +119,7 @@ class Ketidakhadiran extends ResourceController
 
         $this->model->delete($id);
 
-        return $this->respondDeleted(['status' => 200, 'message' => 'Data berhasil dihapus']);
+        return $this->respondDeleted(['message' => 'Data berhasil dihapus']);
     }
 
     public function statuses($id, $status)
@@ -139,6 +133,6 @@ class Ketidakhadiran extends ResourceController
             'status_pengajuan' => ($status == 'disetujui') ? 'disetujui' : 'ditolak'
         ]);
 
-        return $this->respond(['status' => 200, 'message' => 'Status pengajuan berhasil diperbarui']);
+        return $this->respond(['message' => 'Status pengajuan berhasil diperbarui']);
     }
 }

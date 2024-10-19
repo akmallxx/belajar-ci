@@ -34,7 +34,7 @@ class UsersSeeder extends Seeder
         // Example user data linked to the employee
         $userData = [
             'id_pegawai' => $id_pegawai,
-            'username' => 'admin_joe',
+            'username' => 'adminjoe',
             'password' => password_hash('password123', PASSWORD_DEFAULT),
             'status' => 'Aktif',
             'role' => 'Admin',
