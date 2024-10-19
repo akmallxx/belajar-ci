@@ -97,7 +97,7 @@
         <li class="nav-item nav-item-has-children">
           <a href="#0" class="collapsed" data-bs-toggle="collapse" data-bs-target="#apiDocs" aria-controls="masterData" aria-expanded="false" aria-label="Toggle navigation">
               <span class="icon">
-                  <i class="bi bi-database"></i>
+                  <i class="bi bi-cpu"></i>
               </span>
               <span class="text">Api Docs</span>
           </a>
