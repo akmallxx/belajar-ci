@@ -32,17 +32,19 @@ class Jabatan extends ResourceController
 
     public function create()
     {
-        // Ambil data dari body request dalam format JSON
-        $data = $this->request->getJSON(true);  // true untuk mendapatkan array asosiatif
-        log_message('info', 'Data from getJSON: ' . json_encode($data));
+        // Ambil data dari parameter URL
+        $jabatan = $this->request->getVar('jabatan');
 
         // Validasi input
-        if (!$this->validate(['jabatan' => 'required'])) {
-            log_message('error', 'Validation errors: ' . json_encode($this->validator->getErrors()));
-            return $this->failValidationErrors($this->validator->getErrors());
+        if (!$jabatan) {
+            return $this->failValidationErrors(['jabatan' => 'Jabatan is required']);
         }
 
         // Simpan data
+        $data = [
+            'jabatan' => $jabatan
+        ];
+
         if (!$this->jabatanModel->save($data)) {
             log_message('error', 'Failed to save data to database.');
             return $this->fail('Failed to save the job position.');
@@ -54,21 +56,24 @@ class Jabatan extends ResourceController
 
     public function update($id = null)
     {
-        // Ambil data dari body request dalam format JSON
-        $data = $this->request->getJSON(true);  // true untuk mendapatkan array asosiatif
+        // Ambil data dari parameter URL
+        $jabatan = $this->request->getVar('jabatan');
 
         // Validasi input
-        if (!$this->validate(['jabatan' => 'required'])) {
-            return $this->failValidationErrors($this->validator->getErrors());
+        if (!$jabatan) {
+            return $this->failValidationErrors(['jabatan' => 'Jabatan is required']);
         }
 
         // Ambil data jabatan yang ada
-        $jabatan = $this->jabatanModel->find($id);
-        if (!$jabatan) {
+        $existingJabatan = $this->jabatanModel->find($id);
+        if (!$existingJabatan) {
             return $this->failNotFound('Jabatan tidak ditemukan');
         }
 
         // Hanya perbarui jabatan, id tetap tidak berubah
+        $data = [
+            'jabatan' => $jabatan
+        ];
         $this->jabatanModel->update($id, $data);
         return $this->respond(['message' => 'Jabatan berhasil diperbarui.']);
     }

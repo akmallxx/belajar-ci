@@ -16,11 +16,7 @@ class LokasiPresensi extends ResourceController
         $LokasiPresensiModel = new LokasiPresensiModel();
         $lokasiPresensi = $LokasiPresensiModel->findAll();
 
-        return $this->respond([
-            'status' => 200,
-            'message' => 'Data lokasi presensi berhasil diambil',
-            'data' => $lokasiPresensi
-        ]);
+        return $this->respond($lokasiPresensi);
     }
 
     // GET /lokasi_presensi/{id}
@@ -33,33 +29,29 @@ class LokasiPresensi extends ResourceController
             return $this->failNotFound('Data lokasi presensi tidak ditemukan');
         }
 
-        return $this->respond([
-            'status' => 200,
-            'message' => 'Detail lokasi presensi berhasil diambil',
-            'data' => $lokasiPresensi
-        ]);
+        return $this->respond($lokasiPresensi);
     }
 
     // POST /lokasi_presensi
     public function create()
     {
-        $data = $this->request->getJSON(true);
+        // Using getPost() to get input data from the form or request
+        $data = [
+            'nama_lokasi' => $this->request->getPost('nama_lokasi'),
+            'alamat_lokasi' => $this->request->getPost('alamat_lokasi'),
+            'tipe_lokasi' => $this->request->getPost('tipe_lokasi'),
+            'latitude' => $this->request->getPost('latitude'),
+            'longitude' => $this->request->getPost('longitude'),
+            'radius' => $this->request->getPost('radius'),
+            'zona_waktu' => $this->request->getPost('zona_waktu'),
+            'jam_masuk' => $this->request->getPost('jam_masuk'),
+            'jam_pulang' => $this->request->getPost('jam_pulang'),
+        ];
 
         $LokasiPresensiModel = new LokasiPresensiModel();
-        $LokasiPresensiModel->insert([
-            'nama_lokasi' => $data['nama_lokasi'],
-            'alamat_lokasi' => $data['alamat_lokasi'],
-            'tipe_lokasi' => $data['tipe_lokasi'],
-            'latitude' => $data['latitude'],
-            'longitude' => $data['longitude'],
-            'radius' => $data['radius'],
-            'zona_waktu' => $data['zona_waktu'],
-            'jam_masuk' => $data['jam_masuk'],
-            'jam_pulang' => $data['jam_pulang'],
-        ]);
+        $LokasiPresensiModel->insert($data);
 
         return $this->respondCreated([
-            'status' => 201,
             'message' => 'Data lokasi presensi berhasil disimpan'
         ]);
     }
@@ -67,7 +59,18 @@ class LokasiPresensi extends ResourceController
     // PUT /lokasi_presensi/{id}
     public function update($id = null)
     {
-        $data = $this->request->getJSON(true);
+        // Using getVar() to handle both PUT and POST request data
+        $data = [
+            'nama_lokasi' => $this->request->getVar('nama_lokasi'),
+            'alamat_lokasi' => $this->request->getVar('alamat_lokasi'),
+            'tipe_lokasi' => $this->request->getVar('tipe_lokasi'),
+            'latitude' => $this->request->getVar('latitude'),
+            'longitude' => $this->request->getVar('longitude'),
+            'radius' => $this->request->getVar('radius'),
+            'zona_waktu' => $this->request->getVar('zona_waktu'),
+            'jam_masuk' => $this->request->getVar('jam_masuk'),
+            'jam_pulang' => $this->request->getVar('jam_pulang'),
+        ];
 
         $LokasiPresensiModel = new LokasiPresensiModel();
         $lokasiPresensi = $LokasiPresensiModel->find($id);
@@ -76,20 +79,9 @@ class LokasiPresensi extends ResourceController
             return $this->failNotFound('Data lokasi presensi tidak ditemukan');
         }
 
-        $LokasiPresensiModel->update($id, [
-            'nama_lokasi' => $data['nama_lokasi'],
-            'alamat_lokasi' => $data['alamat_lokasi'],
-            'tipe_lokasi' => $data['tipe_lokasi'],
-            'latitude' => $data['latitude'],
-            'longitude' => $data['longitude'],
-            'radius' => $data['radius'],
-            'zona_waktu' => $data['zona_waktu'],
-            'jam_masuk' => $data['jam_masuk'],
-            'jam_pulang' => $data['jam_pulang'],
-        ]);
+        $LokasiPresensiModel->update($id, $data);
 
         return $this->respond([
-            'status' => 200,
             'message' => 'Data lokasi presensi berhasil diubah'
         ]);
     }
@@ -107,7 +99,6 @@ class LokasiPresensi extends ResourceController
         $LokasiPresensiModel->delete($id);
 
         return $this->respondDeleted([
-            'status' => 200,
             'message' => 'Data lokasi presensi berhasil dihapus'
         ]);
     }
