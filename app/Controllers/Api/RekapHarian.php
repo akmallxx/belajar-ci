@@ -9,20 +9,43 @@ use App\Models\PegawaiModel;
 
 class RekapHarian extends ResourceController
 {
+    // Fungsi untuk validasi API key
+    private function validateApiKey()
+    {
+        $apiKey = $this->request->getVar('api_key');
+        $validApiKey = env('app.API_KEY'); // Ambil API key dari environment
+
+        if (!$apiKey || $apiKey !== $validApiKey) {
+            return false;
+        }
+
+        return true;
+    }
+
     // https://domain.com/api/rekap_presensi?date=2024-10-22
     public function index()
     {
+        if (!$this->validateApiKey()) {
+            return $this->failUnauthorized('API key tidak valid');
+        }
+
         $presensiModel = new PresensiModel();
         $lokasi_presensi = new LokasiPresensiModel();
 
         // Get the 'date' parameter from the request
-        $tanggal = $this->request->getVar('date') ?: date('Y-m-d');
+        $tanggal = $this->request->getVar('date');
 
-        // Get attendance data including employee name
-        $rekap_harian = $presensiModel->select('presensi.*, pegawai.nama')
-            ->join('pegawai', 'pegawai.id = presensi.id_pegawai')
-            ->where('tanggal_masuk', $tanggal)
-            ->findAll();
+        // Start query to get attendance data including employee name
+        $query = $presensiModel->select('presensi.*, pegawai.nama')
+            ->join('pegawai', 'pegawai.id = presensi.id_pegawai');
+
+        // Add where condition only if 'date' is provided
+        if ($tanggal) {
+            $query->where('tanggal_masuk', $tanggal);
+        }
+
+        // Fetch all attendance data
+        $rekap_harian = $query->findAll();
 
         foreach ($rekap_harian as &$rh) {
             $batas_waktu = $this->getBatasWaktu($rh['lokasi_presensi']);
@@ -34,13 +57,17 @@ class RekapHarian extends ResourceController
 
         return $this->respond([
             'status' => 200,
-            'tanggal' => $tanggal,
+            'tanggal' => $tanggal ?: date('Y-m-d'),
             'rekap_harian' => $rekap_harian,
         ]);
     }
 
     public function store()
     {
+        if (!$this->validateApiKey()) {
+            return $this->failUnauthorized('API key tidak valid');
+        }
+
         $presensiModel = new PresensiModel();
 
         // Get POST data
@@ -63,6 +90,10 @@ class RekapHarian extends ResourceController
 
     public function show($id = null)
     {
+        if (!$this->validateApiKey()) {
+            return $this->failUnauthorized('API key tidak valid');
+        }
+
         $presensiModel = new PresensiModel();
         $rekap_harian = $presensiModel->select('presensi.*, pegawai.nip, pegawai.nama, pegawai.lokasi_presensi')
             ->join('pegawai', 'pegawai.id = presensi.id_pegawai')
@@ -82,6 +113,10 @@ class RekapHarian extends ResourceController
 
     public function update($id = null)
     {
+        if (!$this->validateApiKey()) {
+            return $this->failUnauthorized('API key tidak valid');
+        }
+
         $presensiModel = new PresensiModel();
 
         // Get PUT or PATCH data
@@ -100,6 +135,10 @@ class RekapHarian extends ResourceController
 
     public function delete($id = null)
     {
+        if (!$this->validateApiKey()) {
+            return $this->failUnauthorized('API key tidak valid');
+        }
+
         $presensiModel = new PresensiModel();
         $rekapHarian = $presensiModel->find($id);
 

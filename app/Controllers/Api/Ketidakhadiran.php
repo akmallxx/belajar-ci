@@ -10,7 +10,6 @@ class Ketidakhadiran extends ResourceController
 {
     protected $modelName = 'App\Models\KetidakhadiranModel';
     protected $format    = 'json';
-
     protected $pegawaiModel;
 
     public function __construct()
@@ -18,10 +17,26 @@ class Ketidakhadiran extends ResourceController
         $this->pegawaiModel = new PegawaiModel();
     }
 
+    // Fungsi untuk validasi API key
+    private function validateApiKey()
+    {
+        $apiKey = $this->request->getVar('api_key');
+        $validApiKey = env('app.API_KEY'); // Ambil API key dari environment
+
+        if (!$apiKey || $apiKey !== $validApiKey) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function index()
     {
-        $data = $this->request->getJSON(true);
+        if (!$this->validateApiKey()) {
+            return $this->failUnauthorized('API key tidak valid');
+        }
 
+        $data = $this->request->getPost();
         $bulan = isset($data['bulan']) ? $data['bulan'] : date('m');
         $tahun = isset($data['tahun']) ? $data['tahun'] : date('Y');
 
@@ -37,6 +52,10 @@ class Ketidakhadiran extends ResourceController
 
     public function show($id = null)
     {
+        if (!$this->validateApiKey()) {
+            return $this->failUnauthorized('API key tidak valid');
+        }
+
         $ketidakhadiran = $this->model
             ->select('ketidakhadiran.*, pegawai.nama as nama_pegawai')
             ->join('pegawai', 'pegawai.id = ketidakhadiran.id_pegawai')
@@ -52,8 +71,11 @@ class Ketidakhadiran extends ResourceController
 
     public function create()
     {
-        $data = $this->request->getJSON(true);
+        if (!$this->validateApiKey()) {
+            return $this->failUnauthorized('API key tidak valid');
+        }
 
+        $data = $this->request->getPost();
         $pegawai = $this->pegawaiModel->find($data['id_pegawai']);
         if (!$pegawai) {
             return $this->failNotFound('ID Pegawai tidak ditemukan.');
@@ -80,8 +102,11 @@ class Ketidakhadiran extends ResourceController
 
     public function update($id = null)
     {
-        $data = $this->request->getJSON(true);
+        if (!$this->validateApiKey()) {
+            return $this->failUnauthorized('API key tidak valid');
+        }
 
+        $data = $this->request->getPost();
         $ketidakhadiran = $this->model->find($id);
         if (!$ketidakhadiran) {
             return $this->failNotFound('Data tidak ditemukan.');
@@ -107,6 +132,10 @@ class Ketidakhadiran extends ResourceController
 
     public function delete($id = null)
     {
+        if (!$this->validateApiKey()) {
+            return $this->failUnauthorized('API key tidak valid');
+        }
+
         $ketidakhadiran = $this->model->find($id);
         if (!$ketidakhadiran) {
             return $this->failNotFound('Data tidak ditemukan.');
@@ -120,19 +149,5 @@ class Ketidakhadiran extends ResourceController
         $this->model->delete($id);
 
         return $this->respondDeleted(['message' => 'Data berhasil dihapus']);
-    }
-
-    public function statuses($id, $status)
-    {
-        $ketidakhadiran = $this->model->find($id);
-        if (!$ketidakhadiran) {
-            return $this->failNotFound('Data tidak ditemukan.');
-        }
-
-        $this->model->update($id, [
-            'status_pengajuan' => ($status == 'disetujui') ? 'disetujui' : 'ditolak'
-        ]);
-
-        return $this->respond(['message' => 'Status pengajuan berhasil diperbarui']);
     }
 }

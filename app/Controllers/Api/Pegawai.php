@@ -23,8 +23,26 @@ class Pegawai extends ResourceController
         $this->jabatanModel = new JabatanModel();
     }
 
+    // Method untuk validasi API key
+    private function validateApiKey()
+    {
+        $apiKey = $this->request->getVar('api_key'); // Ambil api_key dari query parameter
+        $validApiKey = env('app.API_KEY'); // Ambil API_KEY dari environment
+
+        if ($apiKey !== $validApiKey) {
+            return false; // Jika tidak cocok, kembalikan false
+        }
+
+        return true; // Jika cocok, kembalikan true
+    }
+
     public function index()
     {
+        // Validasi API key
+        if (!$this->validateApiKey()) {
+            return $this->failUnauthorized('Invalid API Key'); // Jika tidak valid, kembalikan error
+        }
+
         // Get all Pegawai with their associated username from the UserModel
         $pegawai = $this->pegawaiModel
             ->select('pegawai.*, users.username, users.role')
@@ -34,11 +52,13 @@ class Pegawai extends ResourceController
         return $this->respond($pegawai, 200);
     }
 
-    /**
-     * @param {id} Untuk menampilkan data secara spesifik dengan id
-     */
     public function show($id = null)
     {
+        // Validasi API key
+        if (!$this->validateApiKey()) {
+            return $this->failUnauthorized('Invalid API Key'); // Jika tidak valid, kembalikan error
+        }
+
         // Get the specific Pegawai by ID with the associated username
         $pegawai = $this->pegawaiModel
             ->select('pegawai.*, users.username, users.role, users.password')
@@ -57,25 +77,15 @@ class Pegawai extends ResourceController
         return $this->respond($pegawai, 200);
     }
 
-    /**
-     * Contoh dengan Format JSON untuk data pegawai
-     * {
-     *   "nama": "User Testing",         // Nama lengkap pegawai
-     *   "username": "user",             // Username untuk login
-     *   "password": "password123",      // Password untuk login
-     *   "jenis_kelamin": "Laki-Laki",   // Jenis kelamin pegawai
-     *   "alamat": "Indonesia",          // Alamat domisili pegawai
-     *   "no_handphone": "08123456789",  // Nomor handphone pegawai
-     *   "jabatan": "IT Support",        // Jabatan atau posisi pegawai
-     *   "role": "Pegawai",              // Peran pegawai dalam sistem (misal: Pegawai, Admin)
-     *   "lokasi_presensi": 1,           // ID lokasi presensi pegawai (misal: cabang atau kantor)
-     *   "foto": "test.jpg"              // Nama file foto profil pegawai
-     * }
-    */
     public function create()
     {
+        // Validasi API key
+        if (!$this->validateApiKey()) {
+            return $this->failUnauthorized('Invalid API Key'); // Jika tidak valid, kembalikan error
+        }
+
         // Get data from POST request
-        $data = $this->request->getPost();  // Use getPost() to retrieve form data from request
+        $data = $this->request->getPost();
 
         $rules = [
             'username' => 'required|alpha_numeric|is_unique[users.username]',
@@ -125,44 +135,75 @@ class Pegawai extends ResourceController
 
     public function update($id = null)
     {
-        // Get data from POST or PUT request
-        $data = $this->request->getRawInput();  // Use getRawInput() to capture PUT data or getPost() for form data
+        // Validasi API key
+        if (!$this->validateApiKey()) {
+            return $this->failUnauthorized('Invalid API Key'); // Jika tidak valid, kembalikan error
+        }
 
+        // Ambil data dari request
+        // Menggunakan getVar() yang bisa menangkap data dari URL query, POST, atau PUT
+        $data = $this->request->getVar();
+
+        // Ambil data pegawai dari database
+        $pegawai = $this->pegawaiModel->find($id);
+        if (!$pegawai) {
+            return $this->failNotFound('Pegawai tidak ditemukan.');
+        }
+
+        // Validasi input, hanya memvalidasi field yang ada di input
         $rules = [
-            'username' => 'alpha_numeric',
-            'jabatan' => 'required',
-            'lokasi_presensi' => 'required',
+            'username' => 'permit_empty|alpha_numeric',
         ];
 
         if (!$this->validate($rules)) {
-            return $this->failValidationErrors($this->validator->getErrors());
+            return $this->failValidationErrors([
+                'message' => $this->validator->getErrors(),
+                'data' => $data // Sekarang $data akan berisi data yang diambil dari request
+            ]);
         }
+
+        // Cek parameter kosong, gunakan data dari database jika kosong
+        $nama = !empty($data['nama']) ? $data['nama'] : $pegawai['nama'];
+        $jenis_kelamin = !empty($data['jenis_kelamin']) ? $data['jenis_kelamin'] : $pegawai['jenis_kelamin'];
+        $alamat = !empty($data['alamat']) ? $data['alamat'] : $pegawai['alamat'];
+        $no_handphone = !empty($data['no_handphone']) ? $data['no_handphone'] : $pegawai['no_handphone'];
+        $jabatan = !empty($data['jabatan']) ? $data['jabatan'] : $pegawai['jabatan'];
+        $lokasi_presensi = !empty($data['lokasi_presensi']) ? $data['lokasi_presensi'] : $pegawai['lokasi_presensi'];
 
         // Handle file upload
         $foto = $this->request->getFile('foto');
-        $nama_foto = $foto && !$foto->getError() ? $foto->getRandomName() : '';
+        $nama_foto = $foto && !$foto->getError() ? $foto->getRandomName() : $pegawai['foto'];
         if ($nama_foto && $foto && !$foto->getError()) {
             $foto->move('profile', $nama_foto);
         }
 
         // Update Pegawai
         $this->pegawaiModel->update($id, [
-            'nama' => $data['nama'],
-            'jenis_kelamin' => $data['jenis_kelamin'],
-            'alamat' => $data['alamat'],
-            'no_handphone' => $data['no_handphone'],
-            'jabatan' => $data['jabatan'],
-            'lokasi_presensi' => $data['lokasi_presensi'],
+            'nama' => $nama,
+            'jenis_kelamin' => $jenis_kelamin,
+            'alamat' => $alamat,
+            'no_handphone' => $no_handphone,
+            'jabatan' => $jabatan,
+            'lokasi_presensi' => $lokasi_presensi,
             'foto' => $nama_foto,
         ]);
 
+        // Ambil data user dari database
+        $user = $this->userModel->where('id_pegawai', $id)->first();
+        if (!$user) {
+            return $this->failNotFound('User tidak ditemukan.');
+        }
+
         // Update User
-        $password = password_hash($data['password'], PASSWORD_DEFAULT);
+        $username = !empty($data['username']) ? $data['username'] : $user['username'];
+        $password = !empty($data['password']) ? password_hash($data['password'], PASSWORD_DEFAULT) : $user['password'];
+        $role = !empty($data['role']) ? $data['role'] : $user['role'];
+
         $this->userModel->where('id_pegawai', $id)->set([
-            'username' => $data['username'],
+            'username' => $username,
             'password' => $password,
             'status' => 'Aktif',
-            'role' => $data['role'],
+            'role' => $role,
         ])->update();
 
         return $this->respond(['message' => 'Pegawai berhasil diperbarui.']);
@@ -170,6 +211,11 @@ class Pegawai extends ResourceController
 
     public function delete($id = null)
     {
+        // Validasi API key
+        if (!$this->validateApiKey()) {
+            return $this->failUnauthorized('Invalid API Key'); // Jika tidak valid, kembalikan error
+        }
+
         $pegawai = $this->pegawaiModel->find($id);
         if (!$pegawai) {
             return $this->failNotFound('Pegawai tidak ditemukan');

@@ -5,7 +5,7 @@
     <h1 class="mb-4">API Documentation</h1>
 
     <h2>Base URL</h2>
-    <p><code><?= base_url() ?></code></p>
+    <p><code><?= base_url('api') ?></code></p>
 
     <h2>Endpoints</h2>
     
@@ -18,10 +18,11 @@
             <p>Retrieve daily attendance records.</p>
             <h6>Query Parameters:</h6>
             <ul>
-                <li><strong>date</strong> (string, optional): The date for which to retrieve attendance records (format: YYYY-MM-DD). Defaults to today's date if not provided.</li>
+                <li><strong>date</strong> (string, optional): The date for which to retrieve attendance records (format: YYYY-MM-DD). Default will shows all data if not provided.</li>
+                <li><strong>api_key</strong> (string, required): Your API key for authentication.</li>
             </ul>
             <h5>Example Request:</h5>
-            <pre><code>GET <?= base_url('api/rekap_presensi?date=2024-01-23') ?></code></pre>
+            <pre><code>GET <?= base_url('api/rekap_presensi?date=2024-01-23&api_key=your_api_key_here') ?></code></pre>
             <h5>Response:</h5>
             <pre><code>{
     "status": "success",
@@ -65,7 +66,7 @@
                 <li><strong>foto_keluar</strong> (string, optional): Base64 encoded photo of exit.</li>
             </ul>
             <h5>Example Request:</h5>
-            <pre><code>POST <?= base_url('api/rekap_presensi') ?>
+            <pre><code>POST <?= base_url('api/rekap_presensi?api_key=your_api_key_here') ?>
             
 Content-Type: application/json
 
@@ -94,7 +95,7 @@ Content-Type: application/json
             <h5>Request</h5>
             <p>Retrieve a specific daily attendance record by ID.</p>
             <h5>Example Request:</h5>
-            <pre><code>GET <?= base_url('api/rekap_presensi/1') ?></code></pre>
+            <pre><code>GET <?= base_url('api/rekap_presensi/1?api_key=your_api_key_here') ?></code></pre>
             <h5>Response:</h5>
             <pre><code>{
     "status": "success",
@@ -132,7 +133,7 @@ Content-Type: application/json
                 <li><strong>jam_keluar</strong> (string, optional): Time of exit (format: HH:MM:SS).</li>
             </ul>
             <h5>Example Request:</h5>
-            <pre><code>PUT <?= base_url('api/rekap_presensi/1') ?>
+            <pre><code>PUT <?= base_url('api/rekap_presensi/1?api_key=your_api_key_here') ?>
             
 Content-Type: application/json
 
@@ -157,7 +158,7 @@ Content-Type: application/json
             <h5>Request</h5>
             <p>Delete a specific daily attendance record by ID.</p>
             <h5>Example Request:</h5>
-            <pre><code>DELETE <?= base_url('api/rekap_presensi/1') ?></code></pre>
+            <pre><code>DELETE <?= base_url('api/rekap_presensi/1?api_key=your_api_key_here') ?></code></pre>
             <h5>Response:</h5>
             <pre><code>{
     "status": "success",
@@ -166,9 +167,7 @@ Content-Type: application/json
         </div>
     </div>
 
-    <h2>Authentication</h2>
-    <p>API requests must include a valid API key in the header:</p>
-    <pre><code>X-API-Key: your_api_key_here</code></pre>
+    
 </div>
 
 <?= $this->endSection(); ?>
