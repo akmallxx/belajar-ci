@@ -5,7 +5,7 @@
     <h1 class="mb-4">API Documentation: Pegawai</h1>
 
     <h2>Base URL</h2>
-    <p><code><?= base_url() ?></code></p>
+    <p><code><?= base_url('api') ?></code></p>
 
     <h2>Endpoints</h2>
 
@@ -17,7 +17,7 @@
             <h5>Request</h5>
             <p>Retrieve a list of all employees along with their associated usernames.</p>
             <h5>Example Request:</h5>
-            <pre><code>GET <?= base_url('api/pegawai') ?></code></pre>
+            <pre><code>GET <?= base_url('api/pegawai?api_key=your_api_key_here') ?></code></pre>
             <h5>Response:</h5>
             <pre><code>{
     "status": "success",
@@ -45,7 +45,7 @@
             <h5>Request</h5>
             <p>Retrieve a specific employee by ID.</p>
             <h5>Example Request:</h5>
-            <pre><code>GET <?= base_url('api/pegawai/1') ?></code></pre>
+            <pre><code>GET <?= base_url('api/pegawai/1?api_key=your_api_key_here') ?></code></pre>
             <h5>Response:</h5>
             <pre><code>{
     "status": "success",
@@ -82,7 +82,7 @@
                 <li><strong>foto</strong> (file, optional): Profile photo of the employee.</li>
             </ul>
             <h5>Example Request:</h5>
-            <pre><code>POST <?= base_url('api/pegawai') ?>
+            <pre><code>POST <?= base_url('api/pegawai?api_key=your_api_key_here') ?>
             
 Content-Type: application/json
 
@@ -125,7 +125,7 @@ Content-Type: application/json
                 <li><strong>foto</strong> (file, optional): Profile photo of the employee.</li>
             </ul>
             <h5>Example Request:</h5>
-            <pre><code>PUT <?= base_url('api/pegawai/1') ?>
+            <pre><code>PUT <?= base_url('api/pegawai/1?api_key=your_api_key_here') ?>
             
 Content-Type: application/json
 
@@ -155,7 +155,7 @@ Content-Type: application/json
             <h5>Request</h5>
             <p>Delete a specific employee record by ID.</p>
             <h5>Example Request:</h5>
-            <pre><code>DELETE <?= base_url('api/pegawai/1') ?></code></pre>
+            <pre><code>DELETE <?= base_url('api/pegawai/1?api_key=your_api_key_here') ?></code></pre>
             <h5>Response:</h5>
             <pre><code>{
     "status": "success",
@@ -164,9 +164,7 @@ Content-Type: application/json
         </div>
     </div>
 
-    <h2>Authentication</h2>
-    <p>API requests must include a valid API key in the header:</p>
-    <pre><code>X-API-Key: your_api_key_here</code></pre>
+    
 </div>
 
 <?= $this->endSection(); ?>

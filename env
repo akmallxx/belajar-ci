@@ -14,27 +14,29 @@
 # ENVIRONMENT
 #--------------------------------------------------------------------
 
-CI_ENVIRONMENT = production
+CI_ENVIRONMENT = development
 
 #--------------------------------------------------------------------
 # APP
 #--------------------------------------------------------------------
 
-# app.baseURL = ''
+app.baseURL = 'https://absensi.akmalazahwa.my.id'
 # If you have trouble with `.`, you could also use `_`.
-# app_baseURL = ''
+app_baseURL = 'https://absensi.akmalazahwa.my.id'
 # app.forceGlobalSecureRequests = false
 # app.CSPEnabled = false
-app.webhook_url = 'https://discordapp.com/api/webhooks/1285519320163680366/9k5igObzSQrL5ghYSERV97fKKjvbJLYcnauAe30ALXSsSrBhV9eJOOh6fUFokVbcn_ve'
+
+app.webhook_url = 'https://discord.com/api/webhooks/1297940232116637789/gFED45hBB0jI6plnm5sqqhPUm0dogpv3rYo_7Y6tLzad0GSGqmah-ckwr74BQBJtJ_G_'
+app.API_KEY = 'YXi8bYdXDwt5LuR/7HELzwIqtUw=3timRj2zLyL6WW-xuLj3R=d0PZNcQGRP0zoZ2fKUIlNEqK2jTm6F!5yI3RH8jNDvpxwX7RaCw!RlsTnu-Kpq?6!36TyAy7jl!3IX'
 
 #--------------------------------------------------------------------
 # DATABASE
 #--------------------------------------------------------------------
 
 database.default.hostname = localhost
-database.default.database = ci4_presensi
-database.default.username = root
-database.default.password = root
+database.default.database = akmn4452_absensi
+database.default.username = akmn4452_absensi
+database.default.password = A{{)QZiB@5}+
 database.default.DBDriver = MySQLi
 database.default.DBPrefix =
 database.default.port = 3306

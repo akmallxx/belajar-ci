@@ -15,14 +15,35 @@ class Jabatan extends ResourceController
         $this->jabatanModel = new JabatanModel();
     }
 
+    // Fungsi untuk validasi API key
+    private function validateApiKey()
+    {
+        $apiKey = $this->request->getVar('api_key');
+        $validApiKey = env('app.API_KEY'); // Ambil API key dari environment
+
+        if (!$apiKey || $apiKey !== $validApiKey) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function index()
     {
+        if (!$this->validateApiKey()) {
+            return $this->failUnauthorized('API key tidak valid');
+        }
+
         $data = $this->jabatanModel->findAll();
         return $this->respond($data, 200);
     }
 
     public function show($id = null)
     {
+        if (!$this->validateApiKey()) {
+            return $this->failUnauthorized('API key tidak valid');
+        }
+
         $data = $this->jabatanModel->find($id);
         if (!$data) {
             return $this->failNotFound('Jabatan tidak ditemukan');
@@ -32,6 +53,10 @@ class Jabatan extends ResourceController
 
     public function create()
     {
+        if (!$this->validateApiKey()) {
+            return $this->failUnauthorized('API key tidak valid');
+        }
+
         // Ambil data dari parameter URL
         $jabatan = $this->request->getVar('jabatan');
 
@@ -56,6 +81,10 @@ class Jabatan extends ResourceController
 
     public function update($id = null)
     {
+        if (!$this->validateApiKey()) {
+            return $this->failUnauthorized('API key tidak valid');
+        }
+
         // Ambil data dari parameter URL
         $jabatan = $this->request->getVar('jabatan');
 
@@ -80,6 +109,10 @@ class Jabatan extends ResourceController
 
     public function delete($id = null)
     {
+        if (!$this->validateApiKey()) {
+            return $this->failUnauthorized('API key tidak valid');
+        }
+
         $jabatan = $this->jabatanModel->find($id);
         if (!$jabatan) {
             return $this->failNotFound('Jabatan tidak ditemukan');
