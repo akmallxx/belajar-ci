@@ -5,7 +5,7 @@
     <h1 class="mb-4">API Documentation - Jabatan</h1>
 
     <h2>Base URL</h2>
-    <p><code><?= base_url() ?></code></p>
+    <p><code><?= base_url('api') ?></code></p>
 
     <h2>Endpoints</h2>
 
@@ -17,7 +17,7 @@
             <h5>Request</h5>
             <p>Retrieve all job positions.</p>
             <h5>Example Request:</h5>
-            <pre><code>GET <?= base_url('api/jabatan') ?></code></pre>
+            <pre><code>GET <?= base_url('api/jabatan?api_key=your_api_key_here') ?></code></pre>
             <h5>Response:</h5>
             <pre><code>[
     {
@@ -40,7 +40,7 @@
             <h5>Request</h5>
             <p>Retrieve a specific job position by ID.</p>
             <h5>Example Request:</h5>
-            <pre><code>GET <?= base_url('api/jabatan/1') ?></code></pre>
+            <pre><code>GET <?= base_url('api/jabatan/1?api_key=your_api_key_here') ?></code></pre>
             <h5>Response:</h5>
             <pre><code>{
     "id": 1,
@@ -61,7 +61,7 @@
                 <li><strong>jabatan</strong> (string, required): The name of the job position.</li>
             </ul>
             <h5>Example Request:</h5>
-            <pre><code>POST <?= base_url('api/jabatan') ?>
+            <pre><code>POST <?= base_url('api/jabatan?api_key=your_api_key_here') ?>
 
 Content-Type: application/json
 
@@ -88,7 +88,7 @@ Content-Type: application/json
                 <li><strong>jabatan</strong> (string, required): The new name of the job position.</li>
             </ul>
             <h5>Example Request:</h5>
-            <pre><code>PUT <?= base_url('api/jabatan/1') ?>
+            <pre><code>PUT <?= base_url('api/jabatan/1?api_key=your_api_key_here') ?>
 
 Content-Type: application/json
 
@@ -111,7 +111,7 @@ Content-Type: application/json
             <h5>Request</h5>
             <p>Delete a specific job position by ID.</p>
             <h5>Example Request:</h5>
-            <pre><code>DELETE <?= base_url('api/jabatan/1') ?></code></pre>
+            <pre><code>DELETE <?= base_url('api/jabatan/1?api_key=your_api_key_here') ?></code></pre>
             <h5>Response:</h5>
             <pre><code>{
     "status": "success",
@@ -120,9 +120,7 @@ Content-Type: application/json
         </div>
     </div>
 
-    <h2>Authentication</h2>
-    <p>API requests must include a valid API key in the header:</p>
-    <pre><code>X-API-Key: your_api_key_here</code></pre>
+    
 </div>
 
 <?= $this->endSection(); ?>

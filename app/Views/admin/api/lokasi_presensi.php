@@ -5,7 +5,7 @@
     <h1 class="mb-4">API Documentation - Lokasi Presensi</h1>
 
     <h2>Base URL</h2>
-    <p><code><?= base_url() ?></code></p>
+    <p><code><?= base_url('api') ?></code></p>
 
     <h2>Endpoints</h2>
 
@@ -17,7 +17,7 @@
             <h5>Request</h5>
             <p>Retrieve all locations for attendance.</p>
             <h5>Example Request:</h5>
-            <pre><code>GET <?= base_url('api/lokasi_presensi') ?></code></pre>
+            <pre><code>GET <?= base_url('api/lokasi_presensi?api_key=your_api_key_here') ?></code></pre>
             <h5>Response:</h5>
             <pre><code>[
     {
@@ -45,7 +45,7 @@
             <h5>Request</h5>
             <p>Retrieve a specific location for attendance by ID.</p>
             <h5>Example Request:</h5>
-            <pre><code>GET <?= base_url('api/lokasi_presensi/1') ?></code></pre>
+            <pre><code>GET <?= base_url('api/lokasi_presensi/1?api_key=your_api_key_here') ?></code></pre>
             <h5>Response:</h5>
             <pre><code>{
     "id": 1,
@@ -82,7 +82,7 @@
                 <li><strong>jam_pulang</strong> (string, required): Exit time (format: HH:MM:SS).</li>
             </ul>
             <h5>Example Request:</h5>
-            <pre><code>POST <?= base_url('api/lokasi_presensi') ?>
+            <pre><code>POST <?= base_url('api/lokasi_presensi?api_key=your_api_key_here') ?>
             
 Content-Type: application/json
 
@@ -124,7 +124,7 @@ Content-Type: application/json
                 <li><strong>jam_pulang</strong> (string, optional): Exit time (format: HH:MM:SS).</li>
             </ul>
             <h5>Example Request:</h5>
-            <pre><code>PUT <?= base_url('api/lokasi_presensi/1') ?>
+            <pre><code>PUT <?= base_url('api/lokasi_presensi/1?api_key=your_api_key_here') ?>
             
 Content-Type: application/json
 
@@ -147,7 +147,7 @@ Content-Type: application/json
             <h5>Request</h5>
             <p>Delete a specific location for attendance by ID.</p>
             <h5>Example Request:</h5>
-            <pre><code>DELETE <?= base_url('api/lokasi_presensi/1') ?></code></pre>
+            <pre><code>DELETE <?= base_url('api/lokasi_presensi/1?api_key=your_api_key_here') ?></code></pre>
             <h5>Response:</h5>
             <pre><code>{
     "message": "Data lokasi presensi berhasil dihapus"
@@ -155,9 +155,7 @@ Content-Type: application/json
         </div>
     </div>
 
-    <h2>Authentication</h2>
-    <p>API requests must include a valid API key in the header:</p>
-    <pre><code>X-API-Key: your_api_key_here</code></pre>
+    
 </div>
 
 <?= $this->endSection(); ?>

@@ -5,7 +5,7 @@
     <h1 class="mb-4">API Documentation - Ketidakhadiran</h1>
 
     <h2>Base URL</h2>
-    <p><code><?= base_url() ?></code></p>
+    <p><code><?= base_url('api') ?></code></p>
 
     <h2>Endpoints</h2>
 
@@ -22,7 +22,7 @@
                 <li><strong>tahun</strong> (integer, optional): Year for which to retrieve records. Defaults to current year if not provided.</li>
             </ul>
             <h5>Example Request:</h5>
-            <pre><code>GET <?= base_url('api/ketidakhadiran?bulan=10&tahun=2024') ?></code></pre>
+            <pre><code>GET <?= base_url('api/ketidakhadiran?bulan=10&tahun=2024&api_key=your_api_key_here') ?></code></pre>
             <h5>Response:</h5>
             <pre><code>[
     {
@@ -48,7 +48,7 @@
             <h5>Request</h5>
             <p>Retrieve a specific absence record by ID.</p>
             <h5>Example Request:</h5>
-            <pre><code>GET <?= base_url('api/ketidakhadiran/1') ?></code></pre>
+            <pre><code>GET <?= base_url('api/ketidakhadiran/1?api_key=your_api_key_here') ?></code></pre>
             <h5>Response:</h5>
             <pre><code>{
     "status": "success",
@@ -81,12 +81,11 @@
                 <li><strong>tanggal_awal</strong> (string, required): Start date of absence (format: YYYY-MM-DD).</li>
                 <li><strong>tanggal_akhir</strong> (string, optional): End date of absence (format: YYYY-MM-DD).</li>
                 <li><strong>deskripsi</strong> (string, optional): Additional description.</li>
-                <li><strong>file</strong> (file, optional): Supporting document for the absence.</li>
-                <li><strong>status_pengajuan</strong> (string, required): Status of the absence request.</li>
+                <li><strong>file</strong> (string, optional): File upload for supporting documents.</li>
             </ul>
             <h5>Example Request:</h5>
-            <pre><code>POST <?= base_url('api/ketidakhadiran') ?>
-            
+            <pre><code>POST <?= base_url('api/ketidakhadiran?api_key=your_api_key_here') ?>
+
 Content-Type: application/json
 
 {
@@ -95,12 +94,12 @@ Content-Type: application/json
     "tanggal_awal": "2024-10-10",
     "tanggal_akhir": "2024-10-12",
     "deskripsi": "Tidak bisa masuk kerja karena sakit.",
-    "status_pengajuan": "pending"
+    "file": "document.pdf"
 }</code></pre>
             <h5>Response:</h5>
             <pre><code>{
     "status": "success",
-    "message": "Data berhasil disimpan"
+    "message": "Ketidakhadiran berhasil ditambahkan."
 }</code></pre>
         </div>
     </div>
@@ -114,26 +113,27 @@ Content-Type: application/json
             <p>Update an existing absence record.</p>
             <h6>Body Parameters:</h6>
             <ul>
-                <li><strong>keterangan</strong> (string, optional): Reason for absence.</li>
-                <li><strong>tanggal_awal</strong> (string, optional): Start date of absence (format: YYYY-MM-DD).</li>
+                <li><strong>keterangan</strong> (string, required): Reason for absence.</li>
+                <li><strong>tanggal_awal</strong> (string, required): Start date of absence (format: YYYY-MM-DD).</li>
                 <li><strong>tanggal_akhir</strong> (string, optional): End date of absence (format: YYYY-MM-DD).</li>
                 <li><strong>deskripsi</strong> (string, optional): Additional description.</li>
-                <li><strong>file</strong> (file, optional): Supporting document for the absence.</li>
-                <li><strong>status_pengajuan</strong> (string, required): Status of the absence request.</li>
+                <li><strong>file</strong> (string, optional): File upload for supporting documents.</li>
             </ul>
             <h5>Example Request:</h5>
-            <pre><code>PUT <?= base_url('api/ketidakhadiran/1') ?>
-            
+            <pre><code>PUT <?= base_url('api/ketidakhadiran/1?api_key=your_api_key_here') ?>
+
 Content-Type: application/json
 
 {
-    "keterangan": "Izin",
-    "status_pengajuan": "disetujui"
+    "keterangan": "Sakit Parah",
+    "tanggal_awal": "2024-10-10",
+    "tanggal_akhir": "2024-10-15",
+    "deskripsi": "Tidak bisa masuk kerja karena sakit parah."
 }</code></pre>
             <h5>Response:</h5>
             <pre><code>{
     "status": "success",
-    "message": "Data berhasil diperbarui"
+    "message": "Ketidakhadiran berhasil diperbarui."
 }</code></pre>
         </div>
     </div>
@@ -146,18 +146,16 @@ Content-Type: application/json
             <h5>Request</h5>
             <p>Delete a specific absence record by ID.</p>
             <h5>Example Request:</h5>
-            <pre><code>DELETE <?= base_url('api/ketidakhadiran/1') ?></code></pre>
+            <pre><code>DELETE <?= base_url('api/ketidakhadiran/1?api_key=your_api_key_here') ?></code></pre>
             <h5>Response:</h5>
             <pre><code>{
     "status": "success",
-    "message": "Data berhasil dihapus"
+    "message": "Ketidakhadiran berhasil dihapus."
 }</code></pre>
         </div>
     </div>
 
-    <h2>Authentication</h2>
-    <p>API requests must include a valid API key in the header:</p>
-    <pre><code>X-API-Key: your_api_key_here</code></pre>
+    
 </div>
 
 <?= $this->endSection(); ?>

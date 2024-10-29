@@ -10,9 +10,26 @@ class LokasiPresensi extends ResourceController
     protected $modelName = 'App\Models\LokasiPresensiModel';
     protected $format    = 'json';
 
+    // Fungsi untuk validasi API key
+    private function validateApiKey()
+    {
+        $apiKey = $this->request->getVar('api_key');
+        $validApiKey = env('app.API_KEY'); // Ambil API key dari environment
+
+        if (!$apiKey || $apiKey !== $validApiKey) {
+            return false;
+        }
+
+        return true;
+    }
+
     // GET /lokasi_presensi
     public function index()
     {
+        if (!$this->validateApiKey()) {
+            return $this->failUnauthorized('API key tidak valid');
+        }
+
         $LokasiPresensiModel = new LokasiPresensiModel();
         $lokasiPresensi = $LokasiPresensiModel->findAll();
 
@@ -22,6 +39,10 @@ class LokasiPresensi extends ResourceController
     // GET /lokasi_presensi/{id}
     public function show($id = null)
     {
+        if (!$this->validateApiKey()) {
+            return $this->failUnauthorized('API key tidak valid');
+        }
+
         $LokasiPresensiModel = new LokasiPresensiModel();
         $lokasiPresensi = $LokasiPresensiModel->find($id);
 
@@ -35,6 +56,10 @@ class LokasiPresensi extends ResourceController
     // POST /lokasi_presensi
     public function create()
     {
+        if (!$this->validateApiKey()) {
+            return $this->failUnauthorized('API key tidak valid');
+        }
+
         // Using getPost() to get input data from the form or request
         $data = [
             'nama_lokasi' => $this->request->getPost('nama_lokasi'),
@@ -59,6 +84,10 @@ class LokasiPresensi extends ResourceController
     // PUT /lokasi_presensi/{id}
     public function update($id = null)
     {
+        if (!$this->validateApiKey()) {
+            return $this->failUnauthorized('API key tidak valid');
+        }
+
         // Using getVar() to handle both PUT and POST request data
         $data = [
             'nama_lokasi' => $this->request->getVar('nama_lokasi'),
@@ -89,6 +118,10 @@ class LokasiPresensi extends ResourceController
     // DELETE /lokasi_presensi/{id}
     public function delete($id = null)
     {
+        if (!$this->validateApiKey()) {
+            return $this->failUnauthorized('API key tidak valid');
+        }
+
         $LokasiPresensiModel = new LokasiPresensiModel();
         $lokasiPresensi = $LokasiPresensiModel->find($id);
 
