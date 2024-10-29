@@ -23,17 +23,24 @@ class Pegawai extends ResourceController
         $this->jabatanModel = new JabatanModel();
     }
 
-    // Method untuk validasi API key
+    // API key Validation
     private function validateApiKey()
     {
-        $apiKey = $this->request->getVar('api_key'); // Ambil api_key dari query parameter
-        $validApiKey = env('app.API_KEY'); // Ambil API_KEY dari environment
-
-        if ($apiKey !== $validApiKey) {
-            return false; // Jika tidak cocok, kembalikan false
+        $authorizationHeader = $this->request->getHeaderLine('Authorization');
+        
+        if (strpos($authorizationHeader, 'Bearer ') === 0) {
+            $apiKey = substr($authorizationHeader, 7);
+        } else {
+            $apiKey = $this->request->getVar('api_key');
         }
-
-        return true; // Jika cocok, kembalikan true
+    
+        $validApiKey = env('app.API_KEY');
+    
+        if ($apiKey !== $validApiKey) {
+            return false;
+        }
+    
+        return true;
     }
 
     public function index()
@@ -43,9 +50,8 @@ class Pegawai extends ResourceController
             return $this->failUnauthorized('Invalid API Key'); // Jika tidak valid, kembalikan error
         }
 
-        // Get all Pegawai with their associated username from the UserModel
         $pegawai = $this->pegawaiModel
-            ->select('pegawai.*, users.username, users.role')
+            ->select('pegawai.*, users.username, users.password, users.role')
             ->join('users', 'users.id_pegawai = pegawai.id', 'left')
             ->findAll();
 
