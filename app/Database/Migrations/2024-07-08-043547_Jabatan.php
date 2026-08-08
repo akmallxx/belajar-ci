@@ -21,11 +21,12 @@ class Jabatan extends Migration
             ],
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->createTable('jabatan'); // Create table
+        $this->forge->createTable('mst_jabatan'); // Create table
     }
 
     public function down()
     {
-        $this->forge->dropTable('jabatan'); // zzzzzzzzzz
+        $this->forge->dropTable('mst_jabatan'); // zzzzzzzzzz
     }
 }
+

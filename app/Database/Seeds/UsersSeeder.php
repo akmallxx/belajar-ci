@@ -3,9 +3,9 @@
 namespace App\Database\Seeds;
 
 use CodeIgniter\Database\Seeder;
-use App\Models\PegawaiModel;
-use App\Models\UserModel;
-use App\Models\LokasiPresensiModel;
+use Modules\Pegawai\Models\PegawaiModel;
+use Modules\Auth\Models\UserModel;
+use Modules\LokasiPresensi\Models\LokasiPresensiModel;
 
 class UsersSeeder extends Seeder
 {
@@ -69,3 +69,5 @@ class UsersSeeder extends Seeder
         return 'PEG-' . str_pad($angkaNIP, 4, '0', STR_PAD_LEFT);
     }
 }
+
+

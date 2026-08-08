@@ -38,12 +38,13 @@ class Users extends Migration
             ],
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->addForeignKey('id_pegawai', 'pegawai', 'id'); // add foreign key
-        $this->forge->createTable('users'); // Create table
+        $this->forge->addForeignKey('id_pegawai', 'mst_pegawai', 'id'); // add foreign key
+        $this->forge->createTable('mst_users'); // Create table
     }
 
     public function down()
     {
-        $this->forge->dropTable('users'); // zzzzzzzzzz
+        $this->forge->dropTable('mst_users'); // zzzzzzzzzz
     }
 }
+

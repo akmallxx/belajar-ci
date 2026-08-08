@@ -54,12 +54,13 @@ class Presensi extends Migration
             ]
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->addForeignKey('id_pegawai', 'pegawai', 'id'); // add foreign key
-        $this->forge->createTable('presensi'); // Create table
+        $this->forge->addForeignKey('id_pegawai', 'mst_pegawai', 'id'); // add foreign key
+        $this->forge->createTable('dat_presensi'); // Create table
     }
 
     public function down()
     {
-        $this->forge->dropTable('presensi'); // zzzzzzzzzz
+        $this->forge->dropTable('dat_presensi'); // zzzzzzzzzz
     }
 }
+

@@ -49,11 +49,12 @@ class Pegawai extends Migration
             ],
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->createTable('pegawai');
+        $this->forge->createTable('mst_pegawai');
     }
 
     public function down()
     {
-        $this->forge->dropTable('pegawai');
+        $this->forge->dropTable('mst_pegawai');
     }
 }
+

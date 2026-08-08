@@ -51,11 +51,12 @@ class LokasiPresensi extends Migration
             ],
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->createTable('lokasi_presensi'); // Create table
+        $this->forge->createTable('mst_lokasi_presensi'); // Create table
     }
 
     public function down()
     {
-        $this->forge->dropTable('lokasi_presensi'); // Drop table
+        $this->forge->dropTable('mst_lokasi_presensi'); // Drop table
     }
 }
+

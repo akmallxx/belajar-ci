@@ -41,6 +41,15 @@ class Autoload extends AutoloadConfig
      */
     public $psr4 = [
         APP_NAMESPACE => APPPATH,
+        'Config'      => APPPATH . 'Config',
+        'Modules\Auth'           => APPPATH . 'Modules/Auth',
+        'Modules\Dashboard'      => APPPATH . 'Modules/Dashboard',
+        'Modules\Jabatan'        => APPPATH . 'Modules/Jabatan',
+        'Modules\Ketidakhadiran' => APPPATH . 'Modules/Ketidakhadiran',
+        'Modules\LokasiPresensi' => APPPATH . 'Modules/LokasiPresensi',
+        'Modules\Pegawai'        => APPPATH . 'Modules/Pegawai',
+        'Modules\Presensi'       => APPPATH . 'Modules/Presensi',
+        'Modules\SaldoCuti'      => APPPATH . 'Modules/SaldoCuti',
     ];
 
     /**
@@ -92,3 +101,4 @@ class Autoload extends AutoloadConfig
      */
     public $helpers = [];
 }
+
